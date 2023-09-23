@@ -12,13 +12,71 @@ import Home from "./Home";
 
 // Components
 import { CssBaseline } from "@mui/material";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+
+// Clerk
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  RedirectToSignIn,
+  SignIn,
+  SignUp,
+  UserButton,
+} from "@clerk/clerk-react";
+import { esES } from "@clerk/localizations";
+
+if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key")
+}
+
+const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
 const StyledWrapper = styled(`div`)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   minHeight: "100vh", // Makes footer sticks to the end of the page, with long and short views
 }));
+
+function ClerkProviderWithRoutes() {
+  const navigate = useNavigate();
+
+  return (
+    <ClerkProvider
+      localization={esES}
+      publishableKey={clerkPubKey}
+      navigate={(to) => navigate(to)}
+    >
+      <StyledWrapper>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/sign-in/*"
+            element={<SignIn routing="path" path="/sign-in" />}
+          />
+          <Route
+            path="/sign-up/*"
+            element={<SignUp routing="path" path="/sign-up" />}
+          />
+          <Route
+            path="*"
+            element={
+              <>
+                <SignedIn>
+                  <Home />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
+        </Routes>
+        <Footer />
+      </StyledWrapper>
+    </ClerkProvider>
+  );
+};
 
 const App = () => {
   return (
@@ -30,13 +88,7 @@ const App = () => {
         <link rel="icon" href="/logo.svg" />
       </header>
       <BrowserRouter>
-        <StyledWrapper>
-          <Navbar />
-          <Routes>
-            <Route path="*" element={<Home />} />
-          </Routes>
-          <Footer />
-        </StyledWrapper>
+        <ClerkProviderWithRoutes />
       </BrowserRouter>
     </ThemeContextProvider>
   );
