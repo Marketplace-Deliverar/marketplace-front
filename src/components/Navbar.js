@@ -23,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ mb: 1 }}>
+    <AppBar className="navbar" position="static" sx={{ mb: 1 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* TODO: See if logo goes here or not

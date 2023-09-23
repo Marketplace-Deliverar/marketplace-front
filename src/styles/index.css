@@ -12,6 +12,28 @@ a {
   text-decoration: none;
 }
 
+.navbar {
+  z-index: 1; /* Asegura que la barra de navegación esté por encima del overlay */
+}
+
+.homepage {
+  background-image: url('../media/background.jpg');
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  min-height: 90vh;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Color y opacidad del overlay */
+  pointer-events: none; /* Permite que los elementos debajo del overlay sean clickeables */
+}
+
+
 /*body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

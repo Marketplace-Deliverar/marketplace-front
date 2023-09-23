@@ -6,7 +6,12 @@ import { styled } from "@mui/material/styles";
 // Components
 
 const Home = (props) => {
-  return <></>;
+  return(
+    <div className="homepage">
+      <div className="overlay"></div>
+      {/* Contenido de tu página */}
+    </div>
+  );
 };
 
 export default Home;
