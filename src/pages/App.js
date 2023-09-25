@@ -9,6 +9,7 @@ import { styled } from "@mui/material/styles";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Home from "./Home";
+import Login from "./Login";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -34,6 +35,7 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="*" element={<Home />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
           <Footer />
         </StyledWrapper>
