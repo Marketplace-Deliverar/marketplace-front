@@ -2,7 +2,7 @@ import React from 'react';
 
 const Title = ({ text, color, align }) => {
   const style = {
-    color,
+    color: color,
     textAlign: align,
   };
 
