@@ -3,13 +3,18 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import {Button, CardActionArea, CardActions } from '@mui/material';
+
 
 export default function MyCard({ imageSrc, title, description, label }) {
 
-  console.log("llega");
+  const titleStyle = {
+    fontSize: '18px', 
+    color: '#1976d2', 
+    fontFamily: 'Montserrat, sans-serif',
+  };
 
-  return (
+  return (   
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
@@ -19,7 +24,7 @@ export default function MyCard({ imageSrc, title, description, label }) {
           alt={label}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h5" component="div" style={titleStyle}>
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -28,9 +33,7 @@ export default function MyCard({ imageSrc, title, description, label }) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button variant='content' size="small" color="primary">
-          Ver Más
-        </Button>
+        <Button size="small" style={{ fontWeight: 'bold', fontFamily: 'Montserrat, sans-serif'}}>Ver Más</Button>
       </CardActions>
     </Card>
   );

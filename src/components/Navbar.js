@@ -1,42 +1,56 @@
 import React, { useState } from "react";
-
-// Styles, icons & context
-import { styled } from "@mui/material/styles";
-import { useTheme } from "@mui/material/styles";
-
-// Components
-import { AppBar, Container, Toolbar, Grid, StyledLogo } from "@mui/material";
-import { useMediaQuery } from "@mui/material";
-import Menu from '@mui/material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import MenuIcon from '@mui/icons-material/Menu';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { AppBar, Container, Toolbar, InputBase, IconButton, styled } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import SearchIcon from "@mui/icons-material/Search";
+import MenuItem from "@mui/material/MenuItem";
 import logo from "../media/logo.svg";
+import { Link, useLocation } from "react-router-dom";
 
-const StyledIcon = styled("img");
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: "#fff",
+  paddingTop: theme.spacing(0),
+}));
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+}));
+
+const StyledSearch = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  backgroundColor: "#fff",
+  borderRadius: theme.shape.borderRadius,
+  maxWidth: "170px", // Ancho máximo (mínimo en dispositivos móviles)
+  [theme.breakpoints.up("sm")]: {
+    "&:focus": {
+      width: "100%",
+    },
+  },
+}));
+
+const StyledSearchIcon = styled(IconButton)(({ theme }) => ({
+  padding: theme.spacing(0.5),
+  pointerEvents: "none",
+  color: "#1976d2",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  padding: theme.spacing(0.5, 0.5, 0.5, 0.5), // Reducir el espacio al ajustar el padding
+  paddingLeft: `calc(1em + ${theme.spacing(0)})`, // Ajustar el espacio izquierdo
+  transition: theme.transitions.create("width"),
+  width: "100%",
+}));
 
 const Navbar = () => {
-  const isTinyDisplay = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const location = useLocation();
 
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const pages = ['Nosotros', 'Inicio', 'Blog'];
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [userType, setUserType] = useState("empresa");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  // Renders
-  const renderSmallDisplay = () => {
-    return <></>;
-  };
-
-  const renderMediumDisplay = () => {
-    return <></>;
-  };
-
-  // Handlers
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -45,89 +59,75 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  const isMarcasPage = location.pathname === "/marcas";
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const getMenuOptions = () => {
+    if (isAuthenticated) {
+      if (userType === "empresa") {
+        return ["Mis Datos", "Mis Productos", "Pedidos", "Cerrar Sesión"];
+      } else if (userType === "individuo") {
+        return ["Mi Perfil", "Mis Pedidos", "Cerrar Sesión"];
+      }
+    } else {
+      return ["Iniciar Sesión", "Registrarme"];
+    }
   };
 
   return (
-    <AppBar className="navbar" position="static" sx={{ mb: 1 }}>
+    <StyledAppBar className="navbar" position="static" sx={{ mb: 0 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>  {/* ¿Cómo poner el logo? ¿Cómo poner las opciones de menu y el icono a la derecha? */}
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <img src={logo} alt="Logo" style={{ height: 20 }} />
+          </Link>
+          <div style={{ flexGrow: 1 }}></div>
+          {isMarcasPage && (
+            <StyledSearch>
+              <StyledSearchIcon>
+                <SearchIcon />
+              </StyledSearchIcon>
+              <StyledInputBase
+                placeholder="Buscar Marcas"
+                inputProps={{ "Montserrat, sans-serif": "search" }}
+              />
+            </StyledSearch>
+          )}
+          <div>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
             <Menu
               id="menu-appbar"
-              anchorEl={anchorElNav}
+              anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              {getMenuOptions().map((option, index) => (
+                <MenuItem key={index} onClick={handleClose}>
+                  {option}
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
-          {auth && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Inciar Sesión</MenuItem>
-                <MenuItem onClick={handleClose}>Registrarme</MenuItem>
-              </Menu>
-            </div>
-          )}
-
-          {isTinyDisplay ? renderSmallDisplay() : renderMediumDisplay()}
+          </div>
         </Toolbar>
       </Container>
-    </AppBar>
+    </StyledAppBar>
   );
 };
 

@@ -12,7 +12,7 @@ const MyButton = ({ label, color, disabled }) => {
   const labelStyle = {
     fontFamily: 'Montserrat, sans-serif',
     fontSize: '16px',
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   }
 
   return (

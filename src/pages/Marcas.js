@@ -1,19 +1,17 @@
 import React, { useEffect } from "react";
+import Marcas from "../components/Marcas";
+import Tittle from "../components/Tittle";
 
 // Styles
 import { styled } from "@mui/material/styles";
 
 // Components
 
-import Hero from "../components/Hero";
-import Marcas from "../components/Marcas";
-import Footer from "../components/Footer";
-
 const Home = (props) => {
 
   return (
     <div>
-      <Hero />
+      <Tittle text='Marcas' color="#1976d2" align="center" padding="50px"></Tittle>
       <Marcas />
     </div>
 

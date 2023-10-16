@@ -1,9 +1,13 @@
 import React from 'react';
 
-const Title = ({ text, color, align }) => {
+const Tittle = ({ text, color, align, padding}) => {
   const style = {
-    color: color,
-    textAlign: align,
+    fontFamily: "Montserrat, sans-serif",
+    fontSize: "32px",
+    fontWeight: "bold",
+    textAlign: align, // Ajusta el valor de textAlign directamente a la prop
+    color: color, // Ajusta el valor de color directamente a la prop
+    paddingTop: padding,
   };
 
   return (
@@ -11,4 +15,4 @@ const Title = ({ text, color, align }) => {
   );
 };
 
-export default Title;
+export default Tittle;
