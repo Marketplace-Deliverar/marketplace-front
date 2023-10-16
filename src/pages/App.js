@@ -10,6 +10,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Inicio from "./Inicio";
 import Marcas from "./Marcas";
+import CompanyData from "./CompanyData";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -36,6 +37,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Inicio/>} />
             <Route path="/marcas" element={<Marcas/>} />
+            <Route path="/empresa" element={<CompanyData/>} />
           </Routes>
           <Footer />
         </StyledWrapper>
