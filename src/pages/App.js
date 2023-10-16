@@ -8,9 +8,10 @@ import { styled } from "@mui/material/styles";
 // Custom components
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import NavbarBusiness from "../components/NavbarBusiness";
 import Home from "./Home";
 import Login from "./Login";
-
+import HomeBusiness from "./HomeBusiness";
 // Components
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -32,10 +33,11 @@ const App = () => {
       </header>
       <BrowserRouter>
         <StyledWrapper>
-          <Navbar />
+          <NavbarBusiness />
           <Routes>
             <Route path="*" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/HomeBusiness" element={<HomeBusiness />} />
           </Routes>
           <Footer />
         </StyledWrapper>
