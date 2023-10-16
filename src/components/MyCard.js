@@ -1,8 +1,14 @@
 import * as React from 'react';
-import {Card, CardContent, CardMedia, Typography, Button, CardActionArea, CardActions, IconButton} from '@mui/material';
-import StarIcon  from '@mui/icons-material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions } from '@mui/material';
 
-const MyCard = ({imageSrc, title, description, label}) => {
+export default function MyCard({ imageSrc, title, description, label }) {
+
+  console.log("llega");
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -10,7 +16,7 @@ const MyCard = ({imageSrc, title, description, label}) => {
           component="img"
           height="140"
           image={imageSrc}
-          alt={title}
+          alt={label}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -22,15 +28,10 @@ const MyCard = ({imageSrc, title, description, label}) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="warning">
-          {label}
+        <Button variant='content' size="small" color="primary">
+          Ver Más
         </Button>
-        <IconButton>
-          <StarIcon />
-        </IconButton>
       </CardActions>
     </Card>
   );
-};
-
-export default MyCard;
+}

@@ -5,12 +5,18 @@ import { styled } from "@mui/material/styles";
 
 // Components
 
+import Hero from "../components/Hero";
+import Marcas from "../components/Marcas";
+import Footer from "../components/Footer";
+
 const Home = (props) => {
-  return(
-    <div className="homepage">
-      <div className="overlay"></div>
-      {/* Contenido de tu página */}
+
+  return (
+    <div>
+      <Hero />
+      <Marcas />
     </div>
+
   );
 };
 
