@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 // Custom components
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
 import Marcas from "./Marcas";
 
@@ -33,9 +34,10 @@ const App = () => {
       <BrowserRouter>
         <StyledWrapper>
           <Navbar />
+          <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Inicio/>} />
-            <Route path="/marcas" element={<Marcas/>} />
+            <Route path="/" element={<Inicio />} />
+            <Route path="/marcas" element={<Marcas />} />
           </Routes>
           <Footer />
         </StyledWrapper>
