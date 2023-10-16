@@ -7,17 +7,17 @@ import { styled } from "@mui/material/styles";
 
 // Custom components
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import NavbarBusiness from "../components/NavbarBusiness";
 import Home from "./Home";
-
+import HomeBusiness from "./HomeBusiness";
 // Components
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-const StyledWrapper = styled(`div`)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  minHeight: "100vh", // Makes footer sticks to the end of the page, with long and short views
+const StyledWrapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  minHeight: '100vh',
 }));
 
 const App = () => {
@@ -31,9 +31,10 @@ const App = () => {
       </header>
       <BrowserRouter>
         <StyledWrapper>
-          <Navbar />
+          <NavbarBusiness />
           <Routes>
             <Route path="*" element={<Home />} />
+            <Route path="/HomeBusiness" element={<HomeBusiness />} />
           </Routes>
           <Footer />
         </StyledWrapper>

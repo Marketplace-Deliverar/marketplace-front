@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Marcas from "../components/Marcas";
-import { LeftSidebarFilter } from "../leftSidebarFilter";
+import ProductCards from "../components/ProductCards";
 import BusinessImage from "../components/BusinessImage";
+import { LeftSidebarFilter } from "../LeftSidebarFilter";
 
 export default function HomeBusiness() {
   return (
@@ -10,7 +10,7 @@ export default function HomeBusiness() {
        <BusinessImage />
       <Stack direction="row" sx={{ gap: 3 }}>
         <LeftSidebarFilter />
-        <Marcas />
+        <ProductCards />
       </Stack>
     </div>
   );

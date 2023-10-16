@@ -70,3 +70,8 @@ code {
     monospace;
 }
 */
+
+body {
+  margin: 0;
+  padding: 0; 
+}
