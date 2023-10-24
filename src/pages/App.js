@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
-import Marcas from "./Marcas";
+import Empresas from "./Empresas";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -19,11 +19,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 const StyledWrapper = styled(`div`)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  minHeight: "100vh", // Makes footer sticks to the end of the page, with long and short views
+  minHeight: "100vh",
+  top: 1, // Asegura que el contenedor se expanda verticalmente
 }));
 
+
 const App = () => {
+
+
   return (
+
     <ThemeContextProvider>
       <CssBaseline />
       <header>
@@ -33,16 +38,17 @@ const App = () => {
       </header>
       <BrowserRouter>
         <StyledWrapper>
-          <Navbar />
+            <Navbar />
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Inicio />} />
-            <Route path="/marcas" element={<Marcas />} />
+            <Route path="/empresas" element={<Empresas />} />
           </Routes>
           <Footer />
         </StyledWrapper>
       </BrowserRouter>
     </ThemeContextProvider>
+
   );
 };
 
