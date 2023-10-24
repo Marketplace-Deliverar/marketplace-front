@@ -60,7 +60,6 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-
   const getMenuOptions = () => {
     if (isAuthenticated) {
       if (userType === "empresa") {
