@@ -86,7 +86,7 @@ const Empresas = () => {
         <Grid container spacing={2} alignItems="center" justifyContent="center" marginBottom="20px">
           <Grid item xs={12} md={9}>
             <TextField
-              label="Buscar Empresas"
+              label="Buscar Marcas"
               value={searchTerm}
               onChange={handleSearchChange}
               fullWidth
