@@ -68,10 +68,10 @@ export default function Footer() {
               </Typography>
               <Typography variant="body2">
                 <Link
-                  to="/marcas"
+                  to="/empresas"
                   style={{
                     textDecoration: "none",
-                    color: location.pathname === "/marcas" ? "#0B3660" : "inherit", // Cambia el color si la ubicación actual es "/marcas"
+                    color: location.pathname === "/empresas" ? "#0B3660" : "inherit", // Cambia el color si la ubicación actual es "/marcas"
                     cursor: "pointer"
                   }}
                 >

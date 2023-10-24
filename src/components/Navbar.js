@@ -4,8 +4,9 @@ import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuItem from "@mui/material/MenuItem";
-import logo from "../media/logo.svg";
+import logo from "../media/logo.svg"; 
 import { Link, useLocation } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -48,7 +49,7 @@ const Navbar = () => {
   const location = useLocation();
 
   const [userType, setUserType] = useState("empresa");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenu = (event) => {
@@ -59,7 +60,7 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const isMarcasPage = location.pathname === "/marcas";
+  const isEmpresasPage = location.pathname === "/empresas";
 
   const getMenuOptions = () => {
     if (isAuthenticated) {
@@ -81,50 +82,46 @@ const Navbar = () => {
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>
-          {isMarcasPage && (
-            <StyledSearch>
-              <StyledSearchIcon>
-                <SearchIcon />
-              </StyledSearchIcon>
-              <StyledInputBase
-                placeholder="Buscar Marcas"
-                inputProps={{ "Montserrat, sans-serif": "search" }}
-              />
-            </StyledSearch>
-          )}
-          <div>
+          {isAuthenticated && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión
             <IconButton
               size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
+              aria-label="Carrito de compras"
               color="inherit"
             >
-              <AccountCircle />
+              <ShoppingCartIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              {getMenuOptions().map((option, index) => (
-                <MenuItem key={index} onClick={handleClose}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
-          </div>
+          )}
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {getMenuOptions().map((option, index) => (
+              <MenuItem key={index} onClick={handleClose}>
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
         </Toolbar>
       </Container>
     </StyledAppBar>
