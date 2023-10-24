@@ -60,7 +60,6 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const isEmpresasPage = location.pathname === "/empresas";
 
   const getMenuOptions = () => {
     if (isAuthenticated) {
