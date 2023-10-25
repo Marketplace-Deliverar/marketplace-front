@@ -11,6 +11,8 @@ import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
 import Empresas from "./Empresas";
+import MisDatosCliente from "./MisDatosCliente";
+import MisPedidosCliente from "./MisPedidosCliente";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -43,6 +45,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Inicio />} />
             <Route path="/empresas" element={<Empresas />} />
+            <Route path="/miPerfil" element = {<MisDatosCliente />} />
+            <Route path="/misPedidos" element = {<MisPedidosCliente />} />
           </Routes>
           <Footer />
         </StyledWrapper>
