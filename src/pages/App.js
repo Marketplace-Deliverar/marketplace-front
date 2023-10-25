@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
-import Marcas from "./Marcas";
+import Empresas from "./Empresas";
 import CompanyData from "./CompanyData";
 
 // Components
@@ -42,8 +42,8 @@ const App = () => {
             <Navbar />
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Inicio/>} />
-            <Route path="/marcas" element={<Marcas/>} />
+          <Route path="/" element={<Inicio />} />
+            <Route path="/empresas" element={<Empresas />} />
             <Route path="/empresa" element={<CompanyData/>} />
           </Routes>
           <Footer />
