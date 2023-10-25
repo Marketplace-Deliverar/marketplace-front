@@ -6,7 +6,7 @@ import MyButton from "../components/MyButton";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function Hero() {
-  const descriptionText = "Bienvenidos a Deliver.ar, la innovadora solución de entrega a domicilio que está revolucionando la forma en que recibes tus pedidos en Lago Escobar. ¿Te imaginas recibir tus alimentos favoritos, productos de tiendas locales y más, entregados por adorables robots repartidores? ¡En Deliver.ar, lo hacemos posible.";
+  const descriptionText = "Bienvenidos a Deliver.ar, la innovadora solución de entrega a domicilio que está revolucionando la forma en que recibes tus pedidos en Lago Escobar. ¿Te imaginas recibir tus alimentos favoritos, productos de tiendas locales y más, entregados por adorables robots repartidores? ¡En Deliver.ar, lo hacemos posible!";
 
   const containerStyle = {
     minHeight: '100vh',

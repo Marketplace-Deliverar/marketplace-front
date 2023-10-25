@@ -48,7 +48,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = () => {
   const location = useLocation();
 
-  const [userType, setUserType] = useState("empresa");
+  const [userType, setUserType] = useState("individuo");
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
 
