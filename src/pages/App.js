@@ -11,6 +11,7 @@ import Navbar from "../components/Navbar";
 import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
 import Empresas from "./Empresas";
+import Login from "./Login";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -23,12 +24,8 @@ const StyledWrapper = styled(`div`)(({ theme }) => ({
   top: 1, // Asegura que el contenedor se expanda verticalmente
 }));
 
-
 const App = () => {
-
-
   return (
-
     <ThemeContextProvider>
       <CssBaseline />
       <header>
@@ -38,17 +35,17 @@ const App = () => {
       </header>
       <BrowserRouter>
         <StyledWrapper>
-            <Navbar />
+          <Navbar />
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Inicio />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/empresas" element={<Empresas />} />
           </Routes>
           <Footer />
         </StyledWrapper>
       </BrowserRouter>
     </ThemeContextProvider>
-
   );
 };
 
