@@ -23,7 +23,11 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import { loginUserPassword } from "../apis/authApis";
+import {
+  loginUserPassword,
+  registerCompany,
+  registerUser,
+} from "../apis/authApis";
 import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled(`div`)({
@@ -101,6 +105,7 @@ const Login = () => {
   const [nameInput, setNameInput] = useState("");
   const [surnameInput, setSurnameInput] = useState("");
   const [dniInput, setDniInput] = useState("");
+  const [phoneInput, setPhoneInput] = useState("");
   const [addressInput, setAddressInput] = useState("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -108,6 +113,7 @@ const Login = () => {
 
   const [legalNameInput, setLegalNameInput] = useState("");
   const [cuilInput, setCuilInput] = useState("");
+  const [categoryInput, setCategoryInput] = useState("");
   const [namespaceInput, setNamespaceInput] = useState("");
   const [customPaletteInput, setCustomPaletteInput] = useState(false);
   const [customPalettePrimaryColorInput, setCustomPalettePrimaryColorInput] =
@@ -138,6 +144,7 @@ const Login = () => {
 
   // Handlers
   const handleSubmit = async (event) => {
+    let data = {};
     event.preventDefault();
     if (isSignIn) {
       // Ingresar con usuario y contrasena
@@ -150,30 +157,38 @@ const Login = () => {
         .catch((error) => console.error(error));
     } else {
       if (signUpUserInformation.type === "persona") {
-        // Registro persona
-        setSignUpUserInformation({
+        data = {
           ...signUpUserInformation,
           name: nameInput,
           surname: surnameInput,
           dni: dniInput,
+          phone: phoneInput,
           address: addressInput,
           email: emailInput,
           password: passwordInput,
-        });
+        };
+        // Registro persona
+        setSignUpUserInformation(data);
+        await registerUser(data).catch((error) => console.error(error));
       } else {
-        // Registro empresa
-        setSignUpUserInformation({
+        data = {
           ...signUpUserInformation,
           name: nameInput,
           legalName: legalNameInput,
           cuil: cuilInput,
           url: namespaceInput + ".deliverar.com.ar",
+          address: addressInput,
+          category: categoryInput,
           email: emailInput,
+          phone: phoneInput,
           password: passwordInput,
           customPalette: customPaletteInput,
           primaryColor: customPalettePrimaryColorInput,
           secondaryColor: customPaletteSecondaryColorInput,
-        });
+        };
+        // Registro empresa
+        setSignUpUserInformation(data);
+        await registerCompany(data).catch((error) => console.error(error));
       }
       setShowPassword(false);
       setIsSignIn(true);
@@ -360,6 +375,15 @@ const Login = () => {
             />
           </FormControl>
           <FormControl variant="standard" fullWidth required>
+            <InputLabel htmlFor="phone">Telefono</InputLabel>
+            <Input
+              id="phone"
+              type="text"
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value)}
+            />
+          </FormControl>
+          <FormControl variant="standard" fullWidth required>
             <InputLabel htmlFor="address">Direccion</InputLabel>
             <Input
               id="address"
@@ -484,6 +508,33 @@ const Login = () => {
           />
           .deliverar.com.ar
         </StyledNamespaceFormControl>
+        <FormControl variant="standard" fullWidth required>
+          <InputLabel htmlFor="address">Direccion</InputLabel>
+          <Input
+            id="address"
+            type="text"
+            value={addressInput}
+            onChange={(e) => setAddressInput(e.target.value)}
+          />
+        </FormControl>
+        <FormControl variant="standard" fullWidth required>
+          <InputLabel htmlFor="phone">Telefono</InputLabel>
+          <Input
+            id="phone"
+            type="text"
+            value={phoneInput}
+            onChange={(e) => setPhoneInput(e.target.value)}
+          />
+        </FormControl>
+        <FormControl variant="standard" fullWidth required>
+          <InputLabel htmlFor="category">Rubro</InputLabel>
+          <Input
+            id="category"
+            type="text"
+            value={categoryInput}
+            onChange={(e) => setCategoryInput(e.target.value)}
+          />
+        </FormControl>
         <FormControl variant="standard" fullWidth required>
           <InputLabel htmlFor="email">Correo electronico</InputLabel>
           <Input
@@ -672,11 +723,18 @@ const Login = () => {
                     onClick={(e) => handleSubmit(e, "signUp")}
                     disabled={
                       formInputError ||
+                      (signUpUserInformation.type === "persona" &&
+                        (!surnameInput || !dniInput)) ||
+                      (signUpUserInformation.type === "empresa" &&
+                        (!legalNameInput ||
+                          !cuilInput ||
+                          !namespaceInput ||
+                          !categoryInput)) ||
                       !nameInput ||
-                      !legalNameInput ||
-                      !cuilInput ||
+                      !addressInput ||
                       !emailInput ||
                       !passwordInput ||
+                      !phoneInput ||
                       !confirmPasswordInput
                     }
                     variant="contained"
