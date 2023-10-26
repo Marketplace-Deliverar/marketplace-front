@@ -14,21 +14,8 @@ import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-function createData(imagen, name, price, category, description, stock, amount) {
-    return { imagen, name, price, category, description, stock, amount };
-  }
   
-  const rows = [
-    createData("https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg", 'Prod1', 159, 'Cat1', 'descripción', false, 0),
-    createData("https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg", 'Prod2', 159, 'Cat1', 'descripción', true, 99),
-    createData("https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg", 'Prod3', 159, 'Cat1', 'descripción', false, 0),
-    createData("https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg", 'Prod4', 159, 'Cat1', 'descripción', true, 0),
-    createData("https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg", 'Prod5', 159, 'Cat1', 'descripción', false, 0),
-  ];
-  
-  export default function MyProducts() {
+  export default function MyProducts({rows}) {
     const [checkedStates, setCheckedStates] = useState(rows.map(row => true));
   
     const handleCheckboxChange = (index) => {
@@ -54,42 +41,43 @@ function createData(imagen, name, price, category, description, stock, amount) {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Imagen</TableCell>
-            <TableCell>Producto</TableCell>
-            <TableCell align="right">Precio</TableCell>
-            <TableCell align="right">Categoría</TableCell>
-            <TableCell align="right">Descripción</TableCell>
-            <TableCell align="right">Stock</TableCell>
-            <TableCell align="right">Disponibilidad</TableCell>
+            <TableCell align="left">Imagen</TableCell>
+            <TableCell align="left">Producto</TableCell>
+            <TableCell align="left">Precio</TableCell>
+            <TableCell align="left">Categoría</TableCell>
+            <TableCell align="left">Descripción</TableCell>
+            <TableCell align="left">Stock</TableCell>
+            <TableCell align="left">Disponibilidad</TableCell>
+            {/* <TableCell align="left">Acciones</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={row.titulo}
               sx={{
                 '&:last-child td, &:last-child th': { border: 0 },
-                backgroundColor: row.amount === 0 && row.stock ? 'rgba(255, 0, 0, 0.2)' : 'inherit',
+                backgroundColor: row.nro_stock === 0 && row.stock ? 'rgba(255, 0, 0, 0.2)' : 'inherit',
               }}
             >
-              <TableCell component="th" scope="row">
-                <img src={row.imagen} alt={row.name} width="50" height="50" />
+              <TableCell component="th" scope="row" align="left">
+                <img src={row.imagen} alt={row.titulo} width="50" height="50" />
               </TableCell>
-              <TableCell component="th" scope="row">
-                {row.name}
+              <TableCell component="th" scope="row" align="left">
+                {row.titulo}
               </TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right">{row.category}</TableCell>
-              <TableCell align="right">{row.description}</TableCell>
-              <TableCell align="right">
+              <TableCell align="left">{row.precio}</TableCell>
+              <TableCell align="left">{row.categoria}</TableCell>
+              <TableCell align="left">{row.description}</TableCell>
+              <TableCell align="left">
                 {row.stock ? 'Stock limitado' : 'Stock manual'}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 {row.stock ? (
-                  row.amount === 0 ? (
+                  row.nro_stock === 0 ? (
                     <span style={{ color: 'red' }}>0</span>
                   ) : (
-                    row.amount
+                    row.nro_stock
                   )
                 ) : (
                   <Checkbox
@@ -98,7 +86,7 @@ function createData(imagen, name, price, category, description, stock, amount) {
                   />
                 )}
               </TableCell>
-              <TableCell align="right">
+              {/* <TableCell align="right">
                 <IconButton
                   onClick={() => handleEditClick(index)}
                   color="primary"
@@ -111,7 +99,7 @@ function createData(imagen, name, price, category, description, stock, amount) {
                 >
                   <DeleteIcon />
                 </IconButton>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
