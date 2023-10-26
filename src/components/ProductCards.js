@@ -12,11 +12,15 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {obtenerProductosEmpresa} from "../controllers/productoController"
+import { useNavigate } from "react-router-dom";
 
 
 export default function ProductCards() {
 
+  const navigate = useNavigate()
+
   const [listaProductos, setListaProductos] = useState([]);
+
 
   useEffect(() => {
     async function fetchProductos() {
@@ -31,6 +35,7 @@ export default function ProductCards() {
   }, []);
 
   const handleCardClick = (cardId) => {
+    navigate("/1849171299/product/"+ cardId)
     //aca va la opcion de redirigir
     console.log(`Clic en tarjeta ${cardId}`);
   };
