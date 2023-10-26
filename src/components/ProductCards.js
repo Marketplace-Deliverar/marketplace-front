@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -11,37 +11,49 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {obtenerProductosEmpresa} from "../controllers/productoController"
 
-const cardsData = [
-  { id: 1, label: "descripción", title: "producto 1", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 2, label: "descripción", title: "producto 2", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 3, label: "descripción", title: "producto 3", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 4, label: "descripción", title: "producto 4", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 5, label: "descripción", title: "producto 5", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 6, label: "descripción", title: "producto 6", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 7, label: "descripción", title: "producto 7", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 8, label: "descripción", title: "producto 8", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-  { id: 9, label: "descripción", title: "producto 9", subheader: "precio", image: "https://thumbs.dreamstime.com/b/etiqueta-engomada-del-ejemplo-121022914.jpg" },
-];
 
 export default function ProductCards() {
+
+  const [listaProductos, setListaProductos] = useState([]);
+
+  useEffect(() => {
+    async function fetchProductos() {
+      try {
+        const Productos = await obtenerProductosEmpresa(1849171299);
+        setListaProductos(Productos)
+      } catch (error) {
+        console.error("Error al obtener rubros:", error);
+      }
+    }
+    fetchProductos();
+  }, []);
+
+  const handleCardClick = (cardId) => {
+    //aca va la opcion de redirigir
+    console.log(`Clic en tarjeta ${cardId}`);
+  };
+
+
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-      {cardsData.map((card) => (
-        <Card key={card.id} sx={{ width: 345, height: 400, margin: '16px' }}>
+      {listaProductos.map((card) => (
+        <div key={card.uId} onClick={() => handleCardClick(card.uId)}>
+        <Card key={card.uId} sx={{ width: 345, height: 400, margin: '16px' }}>
           <CardHeader
-            title={card.title}
-            subheader={card.subheader}
+            title={card.titulo}
+            subheader={card.marca}
           />
           <CardMedia
             component="img"
             height="194"
-            image={card.image}
-            alt={card.title}
+            image={card.imagen}
+            alt={card.uId}
           />
           <CardContent>
             <Typography variant="body2" color="text.secondary">
-              {card.label}
+              {card.description}
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
@@ -53,6 +65,7 @@ export default function ProductCards() {
             </IconButton>
           </CardActions>
         </Card>
+        </div>
       ))}
     </div>
   );

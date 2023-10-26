@@ -7,6 +7,7 @@ const urlWebServices = {
     obtenerEmpresas: urlApi +"empresas",
     obtenerRubros: urlApi +"productos/rubro",
     obtenerCategoriasPorRubro: urlApi +"/productos/rubro/",
+    obtenerProductosEmpresa: urlApi + "/productos/empresa/"
     
 }
 
