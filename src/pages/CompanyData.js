@@ -12,24 +12,81 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import Modal from "@mui/material/Modal";
-import {obtenerEmpresa } from "../controllers/empresasController";
+import {obtenerEmpresa, actualizarEmpresa } from "../controllers/empresasController";
+import {obtenerRubros} from "../controllers/marcasController"
 
 const CompanyData = () => {
     const [age, setAge] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [datosEmpresa, setDatosEmpresa] = useState();
+    const [listaRubros, setListaRubros] = useState([]);
+    const [selectedRubros, setSelectRubros] = useState("");
+    const [razonSocial, setRazonSocial] = useState(""); 
+    const [cuit, setCuit] = useState(""); 
+    const [email, setEmail] = useState(""); 
+    const [telefonoCelular, setTelefonoCelular] = useState(""); 
+    const [direccion, setDireccion] = useState(""); 
+
+
+    const handleChangeRubro = (event) => {
+        setSelectRubros(event.target.value); 
+    };
+
+    const handleSubmit = async () => {
+        const updatedData = {
+            razon_social: razonSocial,
+            cuit: cuit,
+            email: email,
+            celular: telefonoCelular,
+            direccion: direccion,
+            rubro: selectedRubros,
+            color_primario: "#FF5733",
+            color_secundario: "#3399FF",
+        };
+        console.log(updatedData)
+        console.log(JSON.stringify(updatedData))
+        try {
+            const rubros = await actualizarEmpresa(186,updatedData);
+            setListaRubros(rubros);
+          } catch (error) {
+            console.error("Error al obtener rubros:", error);
+        }
+
+        closeModal();
+    };
+
 
     useEffect(() => {
         async function fetchData() {
           try {
             const empresa = await obtenerEmpresa(186);
             setDatosEmpresa(empresa);
+            setSelectRubros(empresa.rubro);
+            setRazonSocial(empresa.razon_social);
+            setCuit(empresa.cuit);
+            setEmail(empresa.email);
+            setTelefonoCelular(empresa.celular);
+            setDireccion(empresa.direccion);
           } catch (error) {
             console.error("Error al obtener empresas:", error);
           }
         }
         fetchData();
       }, []);
+
+      useEffect(() => {
+        async function fetchRubros() {
+          try {
+            const rubros = await obtenerRubros();
+            setListaRubros(rubros);
+          } catch (error) {
+            console.error("Error al obtener rubros:", error);
+          }
+        }
+        fetchRubros();
+      }, []);
+
+      
   
     const handleChange = (event) => {
       setAge(event.target.value);
@@ -92,6 +149,7 @@ const CompanyData = () => {
             <Typography component="h1" variant="h5" sx={{marginBottom:2, marginLeft: 2}}>
                 Datos de Empresa
             </Typography>
+            {datosEmpresa && (
             <Box
               sx={{
                 backgroundColor: "#f2f2f2",
@@ -100,6 +158,7 @@ const CompanyData = () => {
                 borderRadius: 2,
               }}
             >
+            
             <Typography component="h1" variant="h6" sx={{marginBottom:2, marginLeft: 2}}>
                 CUIT
             </Typography>
@@ -148,11 +207,13 @@ const CompanyData = () => {
             <Typography  variant="subtitle1" sx={{marginBottom:2, marginLeft: 2}}>
                 {datosEmpresa.color_secundario}
             </Typography>
+            
             <Button variant="contained" onClick={openModal} >
                 Editar Datos
             </Button>
              
             </Box>
+            )}
           </Grid>
         </Grid>
   
@@ -175,6 +236,7 @@ const CompanyData = () => {
             <Typography component="h1" variant="h5" sx={{marginBottom:2}}>
                 Edite los datos de su empresa
             </Typography>
+            {datosEmpresa && (
             <form>
               <TextField fullWidth id="outlined-basic-1" label="Razón Social" variant="outlined" defaultValue={datosEmpresa.razon_social}/>
               <TextField fullWidth id="outlined-basic-2" label="CUIT" variant="outlined" sx={{marginTop: 2}} defaultValue={datosEmpresa.cuit}/>
@@ -212,12 +274,14 @@ const CompanyData = () => {
                 <Select
                   labelId="rubro-label"
                   id="rubro-select"
-                  value={age}
-                  onChange={handleChange}
+                  value={selectedRubros}
+                  onChange={handleChangeRubro}
                 >
-                  <MenuItem value={10}>Rubro1</MenuItem>
-                  <MenuItem value={20}>Rubro2</MenuItem>
-                  <MenuItem value={30}>Rubro3</MenuItem>
+                {listaRubros.map((rubro, index) => (
+                    <MenuItem key={index} value={rubro}>
+                        {rubro}
+                    </MenuItem>
+                ))}
                 </Select>
               </FormControl>
               <label htmlFor="icon-button-file" > 
@@ -230,6 +294,7 @@ const CompanyData = () => {
                 Guardar
               </Button>
             </form>
+            )}
           </Box>
         </Modal>
       </Box>
