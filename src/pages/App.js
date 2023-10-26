@@ -12,6 +12,7 @@ import NavbarBusiness from "../components/NavbarBusiness";
 import Home from "./Home";
 import Login from "./Login";
 import HomeBusiness from "./HomeBusiness";
+import BusinessProducts from "./BusinessProducts";
 // Components
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -33,11 +34,12 @@ const App = () => {
       </header>
       <BrowserRouter>
         <StyledWrapper>
-          <NavbarBusiness />
+          <Navbar/>
           <Routes>
             <Route path="*" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/HomeBusiness" element={<HomeBusiness />} />
+            <Route path="/BusinessProducts" element={<BusinessProducts />} />
           </Routes>
           <Footer />
         </StyledWrapper>
