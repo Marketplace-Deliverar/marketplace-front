@@ -42,8 +42,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/empresas" element={<Empresas />} />
           </Routes>
-          <Footer />
         </StyledWrapper>
+        <Footer />
       </BrowserRouter>
     </ThemeContextProvider>
   );

@@ -23,6 +23,8 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
+import { loginUserPassword } from "../apis/authApis";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -80,7 +82,15 @@ const StyledDot = styled(`div`)(({ dotColor, theme }) => ({
   background: dotColor,
 }));
 
+const StyledNamespaceFormControl = styled(FormControl)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "flex-end",
+  justifyContent: "space-around",
+}));
+
 const Login = () => {
+  const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(true);
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
@@ -91,12 +101,14 @@ const Login = () => {
   const [nameInput, setNameInput] = useState("");
   const [surnameInput, setSurnameInput] = useState("");
   const [dniInput, setDniInput] = useState("");
+  const [addressInput, setAddressInput] = useState("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formInputError, setFormInputError] = useState(false);
 
   const [legalNameInput, setLegalNameInput] = useState("");
   const [cuilInput, setCuilInput] = useState("");
+  const [namespaceInput, setNamespaceInput] = useState("");
   const [customPaletteInput, setCustomPaletteInput] = useState(false);
   const [customPalettePrimaryColorInput, setCustomPalettePrimaryColorInput] =
     useState("blue");
@@ -125,7 +137,7 @@ const Login = () => {
   };
 
   // Handlers
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (isSignIn) {
       // Ingresar con usuario y contrasena
@@ -133,6 +145,9 @@ const Login = () => {
         email: emailInput,
         password: passwordInput,
       });
+      await loginUserPassword(emailInput, passwordInput)
+        .then(() => {})
+        .catch((error) => console.error(error));
     } else {
       if (signUpUserInformation.type === "persona") {
         // Registro persona
@@ -141,6 +156,7 @@ const Login = () => {
           name: nameInput,
           surname: surnameInput,
           dni: dniInput,
+          address: addressInput,
           email: emailInput,
           password: passwordInput,
         });
@@ -151,6 +167,7 @@ const Login = () => {
           name: nameInput,
           legalName: legalNameInput,
           cuil: cuilInput,
+          url: namespaceInput + ".deliverar.com.ar",
           email: emailInput,
           password: passwordInput,
           customPalette: customPaletteInput,
@@ -162,7 +179,10 @@ const Login = () => {
       setIsSignIn(true);
     }
 
-    // TODO: Limpiar variables y redirigir
+    navigate("/", {
+      // TODO: Props are not being recognized
+      state: { userIsAuthenticated: true },
+    });
   };
 
   const handleNext = () => {
@@ -340,6 +360,15 @@ const Login = () => {
             />
           </FormControl>
           <FormControl variant="standard" fullWidth required>
+            <InputLabel htmlFor="address">Direccion</InputLabel>
+            <Input
+              id="address"
+              type="text"
+              value={addressInput}
+              onChange={(e) => setAddressInput(e.target.value)}
+            />
+          </FormControl>
+          <FormControl variant="standard" fullWidth required>
             <InputLabel htmlFor="email">Correo electronico</InputLabel>
             <Input
               id="email"
@@ -443,6 +472,18 @@ const Login = () => {
             onChange={(e) => setCuilInput(e.target.value)}
           />
         </FormControl>
+        <StyledNamespaceFormControl variant="standard" required>
+          <InputLabel htmlFor="namespace">Dominio</InputLabel>
+          <Input
+            id="namespace"
+            name="namespace"
+            type="text"
+            value={namespaceInput}
+            fullWidth
+            onChange={(e) => setNamespaceInput(e.target.value)}
+          />
+          .deliverar.com.ar
+        </StyledNamespaceFormControl>
         <FormControl variant="standard" fullWidth required>
           <InputLabel htmlFor="email">Correo electronico</InputLabel>
           <Input
