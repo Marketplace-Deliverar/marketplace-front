@@ -6,10 +6,10 @@ const urlWebServices = {
     //marcas o empresas
     obtenerEmpresas: urlApi +"empresas",
     obtenerRubros: urlApi +"productos/rubro",
-    obtenerCategoriasPorRubro: urlApi +"/productos/rubro/",
-    
+
     //usuarios
-    editarDatosUsuario: urlApi +"/usuarios/"
+    obtenerDatosUsuario: urlApi +"usuarios/",
+    editarDatosUsuario: urlApi +"usuarios/"
     
 }
 
