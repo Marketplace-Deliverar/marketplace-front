@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-import { AppBar, Container, Toolbar, InputBase, IconButton, styled } from "@mui/material";
+import {
+  AppBar,
+  Container,
+  Toolbar,
+  InputBase,
+  IconButton,
+  styled,
+} from "@mui/material";
 import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuItem from "@mui/material/MenuItem";
-import logo from "../media/logo.svg"; 
+import logo from "../media/logo.svg";
 import { Link, useLocation } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
@@ -49,7 +56,7 @@ const Navbar = () => {
   const location = useLocation();
 
   const [userType, setUserType] = useState("individuo");
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenu = (event) => {
@@ -63,12 +70,24 @@ const Navbar = () => {
   const getMenuOptions = () => {
     if (isAuthenticated) {
       if (userType === "empresa") {
-        return ["Mis Datos", "Mis Productos", "Pedidos", "Cerrar Sesión"];
+        return [
+          { label: "Mis Datos", redirectUrl: "" },
+          { label: "Mis Productos", redirectUrl: "" },
+          { label: "Pedidos", redirectUrl: "" },
+          { label: "Cerrar Sesión", redirectUrl: "" },
+        ];
       } else if (userType === "individuo") {
-        return ["Mi Perfil", "Mis Pedidos", "Cerrar Sesión"];
+        return [
+          { label: "Mi Perfil", redirectUrl: "" },
+          { label: "Mis Pedidos", redirectUrl: "" },
+          { label: "Cerrar Sesión", redirectUrl: "" },
+        ];
       }
     } else {
-      return ["Iniciar Sesión", "Registrarme"];
+      return [
+        { label: "Iniciar Sesión", redirectUrl: "login" },
+        { label: "Registrarme", redirectUrl: "login" },
+      ];
     }
   };
 
@@ -116,7 +135,7 @@ const Navbar = () => {
           >
             {getMenuOptions().map((option, index) => (
               <MenuItem key={index} onClick={handleClose}>
-                {option}
+                {option.label}
               </MenuItem>
             ))}
           </Menu>
