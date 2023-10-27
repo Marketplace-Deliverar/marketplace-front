@@ -119,6 +119,7 @@ const Empresas = () => {
               title={empresa.razon_social}
               description={empresa.rubro}
               label={empresa.uId}
+              url={empresa.url}
             />
           </Grid>
         ))}

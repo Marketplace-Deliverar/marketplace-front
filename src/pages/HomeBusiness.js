@@ -4,10 +4,10 @@ import ProductCards from "../components/ProductCards";
 import BusinessImage from "../components/BusinessImage";
 import { LeftSidebarFilter } from "../leftSidebarFilter";
 
-export default function HomeBusiness() {
+export default function HomeBusiness({ empresa }) {
   return (
     <div>
-       <BusinessImage />
+      <BusinessImage />
       <Stack direction="row" sx={{ gap: 3 }}>
         <LeftSidebarFilter />
         <ProductCards />
