@@ -10,7 +10,7 @@ export default function HomeBusiness({ empresa }) {
       <BusinessImage />
       <Stack direction="row" sx={{ gap: 3 }}>
         <LeftSidebarFilter />
-        <ProductCards />
+        <ProductCards empresa={empresa}/>
       </Stack>
     </div>
   );
