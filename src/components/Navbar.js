@@ -51,7 +51,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
 }));
 
-const Navbar = ({ userIsAuthenticated = false }) => {
+const Navbar = ({ userIsAuthenticated = false, navBarColor = "#1976d2" }) => {
   const navigate = useNavigate();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -133,7 +133,7 @@ const Navbar = ({ userIsAuthenticated = false }) => {
   };
 
   return (
-    <StyledAppBar className="navbar" position="static" sx={{ mb: 0 }}>
+    <StyledAppBar className="navbar" position="static" sx={{ mb: 0 }} style={{ backgroundColor: navBarColor }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>

@@ -170,15 +170,15 @@ const Login = () => {
 
         if (!('error' in datosUsuario)) {
           console.log('Usuario');
-          // window.location.href = 'https://' + window.location.hostname;
-          window.location.href = 'http://hola.localhost:3000';
+          window.location.href = 'https://' + window.location.hostname;
+          // window.location.href = 'http://hola.localhost:3000';
           localStorage.setItem('userType', 'individuo')
         }
 
         if (!('error' in datosEmpresa)) {
           console.log('Empresa');
-          // window.location.href = 'https://' + window.location.hostname;
-          window.location.href = 'http://hola.localhost:3000';
+          window.location.href = 'https://' + window.location.hostname;
+          // window.location.href = 'http://hola.localhost:3000';
           localStorage.setItem('userType', 'empresa')
         }
       } catch (error) {

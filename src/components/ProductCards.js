@@ -11,31 +11,37 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {obtenerProductosEmpresa} from "../controllers/productoController"
+import { obtenerProductosEmpresa } from "../controllers/productoController"
 import { useNavigate } from "react-router-dom";
 
 
-export default function ProductCards({empresa}) {
+export default function ProductCards({ empresa }) {
 
   const navigate = useNavigate()
 
   const [listaProductos, setListaProductos] = useState([]);
 
+  console.log("empresa", empresa)
+
 
   useEffect(() => {
     async function fetchProductos() {
-      try {
-        const Productos = await obtenerProductosEmpresa(1849171299);
-        setListaProductos(Productos)
-      } catch (error) {
-        console.error("Error al obtener rubros:", error);
+      if (empresa !== null && empresa.uId !== undefined) {
+        try {
+          console.log("empresa.uid", empresa.uid)
+          const Productos = await obtenerProductosEmpresa(empresa.uId);
+          console.log(Productos)
+          setListaProductos(Productos)
+        } catch (error) {
+          console.error("Error al obtener rubros:", error);
+        }
       }
     }
     fetchProductos();
-  }, []);
+  }, [empresa]);
 
   const handleCardClick = (cardId) => {
-    navigate("/" + empresa.uid + "/product/"+ cardId)
+    navigate("/" + empresa.uId + "/product/" + cardId)
     //aca va la opcion de redirigir
     console.log(`Clic en tarjeta ${cardId}`);
   };
@@ -45,31 +51,31 @@ export default function ProductCards({empresa}) {
     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
       {listaProductos.map((card) => (
         <div key={card.uId} onClick={() => handleCardClick(card.uId)}>
-        <Card key={card.uId} sx={{ width: 345, height: 400, margin: '16px' }}>
-          <CardHeader
-            title={card.titulo}
-            subheader={card.marca}
-          />
-          <CardMedia
-            component="img"
-            height="194"
-            image={card.imagen}
-            alt={card.uId}
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {card.description}
-            </Typography>
-          </CardContent>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <ShoppingCartIcon />
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
+          <Card key={card.uId} sx={{ width: 345, height: 400, margin: '16px' }}>
+            <CardHeader
+              title={card.titulo}
+              subheader={card.marca}
+            />
+            <CardMedia
+              component="img"
+              height="194"
+              image={card.imagen}
+              alt={card.uId}
+            />
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                {card.description}
+              </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
+              <IconButton aria-label="add to favorites">
+                <ShoppingCartIcon />
+              </IconButton>
+              <IconButton aria-label="share">
+                <ShareIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
         </div>
       ))}
     </div>

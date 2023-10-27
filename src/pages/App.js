@@ -48,61 +48,11 @@ const StyledWrapper = styled(`div`)(({ theme }) => ({
 }));
 
 const App = () => {
+  const [navbarColor, setNavbarColor] = React.useState("#1976d2")
   const domain = window.location.hostname;
   let content;
 
-  const obtenerDatosEmpresa = (dominio) => {
-    fetch(
-      `https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws/empresas/url/${dominio}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // Aquí puedes trabajar con los datos recibidos en formato JSON
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Hubo un problema con la solicitud fetch:", error);
-      });
-  };
-
-  console.log(domain);
-
-  let datos = obtenerDatosEmpresa("carrefour.marketplace.deliver.ar");
-  // let datos = obtenerDatosEmpresa(domain)
-  content = (
-    <Routes>
-      <Route
-        path="/*"
-        element={
-          domain.startsWith("localhost") ? (
-            <Inicio />
-          ) : (
-            <HomeBusiness empresa={datos} />
-          )
-        }
-      />
-      <Route path="/login" element={<Login />} />
-      <Route path="/empresas" element={<Empresas />} />
-      <Route path="/empresa" element={<CompanyData />} />
-      <Route path="/HomeBusiness" element={<HomeBusiness />} />
-      <Route path="/BusinessProducts" element={<BusinessProducts />} />
-      <Route path="/:cid/product/:pid" element={<ProductDetail />} />
-    </Routes>
-  );
-
   if (domain.startsWith("marketplace.deliver.ar")) {
-    // if (domain.startsWith("localhost")) {
     content = (
       <Routes>
         <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
@@ -112,21 +62,21 @@ const App = () => {
         <Route path="/empresas" element={<><SignedIn> <Empresas /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresa" element={<><SignedIn> <CompanyData /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/BusinessProducts" element={<><SignedIn> <BusinessProducts /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/:cid/product/:pid" element={<><SignedIn><ProductDetail /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="*" element={<><SignedIn><Inicio /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
       </Routes>
     );
   } else {
-    // let datos = obtenerDatosEmpresa("carrefour.marketplace.deliver.ar")
-    let datos = obtenerDatosEmpresa(domain)
     content = (
       <Routes>
         <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
         <Route path="/sign-up/*" element={<SignUp routing="path" path="/sign-up" />} />
-        <Route path="/" element={<><HomeBusiness empresa={datos} /></>} />
+        <Route path="/" element={<><HomeBusiness empresaURL={domain} setNavBarColor={setNavbarColor} /></>} />
         <Route path="/login" element={<><SignedIn> <Login /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresas" element={<><SignedIn> <Empresas /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresa" element={<><SignedIn> <CompanyData /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/BusinessProducts" element={<><SignedIn> <BusinessProducts /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/:cid/product/:pid" element={<><SignedIn><ProductDetail /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="*" element={<><Inicio /></>} />
       </Routes>
     );
@@ -142,7 +92,7 @@ const App = () => {
         navigate={(to) => navigate(to)}
       >
         <StyledWrapper>
-          <Navbar />
+          <Navbar navBarColor={navbarColor} />
           {content}
         </StyledWrapper>
         <Footer />

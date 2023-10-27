@@ -47,6 +47,7 @@ const ProductDetails = (props) => {
         .then((data) => {
           if (data) {
             let product = data.find((item) => item.uId === productID);
+            console.log(product)
             product = {
               title: product.titulo,
               description: product.description,
@@ -55,8 +56,8 @@ const ProductDetails = (props) => {
               subCategory: product.categoria,
               price: product.precio,
               images: [
-                "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=formatt&fit=crop&w=400&h=400&q=60",
-                "https://images.unsplash.com/photo-1625093742435-6fa192b6fb10?auto=format&fit=crop&w=400&h=400&q=60",
+                product.imagen,
+                "https://img.freepik.com/vector-premium/boton-rojo-comprar-ahora-diseno-web-haga-clic-aqui-boton-comprar-ahora-concepto-compras_820464-146.jpg",
               ],
               validateStock: product.stock,
               stock: product.nro_stock,
@@ -108,7 +109,6 @@ const ProductDetails = (props) => {
             textAlign={"left"}
             display={"flex"}
             flexDirection={"column"}
-            jus
           >
             <Typography variant="h5" align="start">
               {productData.brand} {" - "} {productData.title}
@@ -154,7 +154,11 @@ const ProductDetails = (props) => {
                       component="img"
                       src={step}
                       alt={productData.title}
-                      sx={{ overflow: "hidden" }}
+                      sx={{
+                        overflow: "hidden",
+                        maxWidth: "100%", // Controla el ancho máximo
+                        maxHeight: "400px", // Controla la altura máxima
+                      }}
                     />
                   ) : null}
                 </div>
