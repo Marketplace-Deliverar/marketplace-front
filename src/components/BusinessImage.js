@@ -7,6 +7,7 @@ import "./../styles/index.css";
 
 export default function BusinessImage({ empresa, setNavBar }) {
   const [imagen, setImagen] = useState("");
+  const [loading, setLoading] = useState(true);
 
   let imageStyle = {
     maxWidth: "80%",
@@ -19,19 +20,24 @@ export default function BusinessImage({ empresa, setNavBar }) {
 
   // Use useEffect to update the image based on the empresa prop
   useEffect(() => {
-    if (empresa === "Fravega") {
-      setImagen(fravega);
-      setNavBar("#a51f83")
-    } else if (empresa === "Garbarino") {
-      setImagen(garbarino);
-      setNavBar("red")
-    } else if (empresa === "Carrefour") {
-      setImagen(carrefour);
-      setNavBar("#0e3090")
-    } else {
-      setImagen(marketplace); // Clear the image if empresa is not "Fravega"
+    if (empresa !== undefined) {
+      if (empresa === "Fravega") {
+        setImagen(fravega);
+        setNavBar("#a51f83")
+      } else if (empresa === "Garbarino") {
+        setImagen(garbarino);
+        setNavBar("red")
+      } else if (empresa === "Carrefour") {
+        setImagen(carrefour);
+        setNavBar("#0e3090")
+      } else {
+        setImagen(marketplace);
+      }
+      setLoading(false)
     }
   }, [empresa]);
+
+  if (loading) return <></>;
 
   return (
     <div className="image-container">
