@@ -8,8 +8,10 @@ import { styled } from "@mui/material/styles";
 import Hero from "../components/Hero";
 import Empresas from "../components/Empresas";
 import MyButton from "../components/MyButton";
-import { Link,  } from "react-router-dom";
+import { Link, } from "react-router-dom";
 import Tittle from "../components/Tittle";
+import { useUser } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = (props) => {
 

@@ -15,9 +15,10 @@ export const loginUserPassword = async (user, password) => {
     });*/
 };
 export const registerUser = async (userData) => {
-  const { name, lastName, dni, email, cellphone, address } = userData;
+  const { uId, name, lastName, dni, email, cellphone, address } = userData;
   axios
-    .post(baseBackendURL + "", {
+    .post(baseBackendURL + "usuarios", {
+      uId: uId,
       nombre: name || "",
       apellido: lastName || "",
       dni: dni || 0,
@@ -35,6 +36,7 @@ export const registerUser = async (userData) => {
 };
 export const registerCompany = async (companyData) => {
   const {
+    uId,
     legalName,
     cuil,
     url,
@@ -48,7 +50,8 @@ export const registerCompany = async (companyData) => {
     category, // Pending
   } = companyData;
   axios
-    .post(baseBackendURL + "", {
+    .post(baseBackendURL + "empresas", {
+      uId: uId,
       razon_social: legalName,
       cuit: cuil,
       email: email,

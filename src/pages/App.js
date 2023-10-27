@@ -46,46 +46,6 @@ const StyledWrapper = styled(`div`)(({ theme }) => ({
   top: 1, // Asegura que el contenedor se expanda verticalmente
 }));
 
-function ClerkProviderWithRoutes() {
-  const navigate = useNavigate();
-
-  return (
-    <ClerkProvider
-      localization={esES}
-      publishableKey={clerkPubKey}
-      navigate={(to) => navigate(to)}
-    >
-      <StyledWrapper>
-        <Navbar />
-        <Routes>
-          <Route
-            path="/sign-in/*"
-            element={<SignIn routing="path" path="/sign-in" />}
-          />
-          <Route
-            path="/sign-up/*"
-            element={<SignUp routing="path" path="/sign-up" />}
-          />
-          <Route
-            path="*"
-            element={
-              <>
-                <SignedIn>
-                  <Home />
-                </SignedIn>
-                <SignedOut>
-                  <RedirectToSignIn />
-                </SignedOut>
-              </>
-            }
-          />
-        </Routes>
-        <Footer />
-      </StyledWrapper>
-    </ClerkProvider>
-  );
-};
-
 const App = () => {
   const domain = window.location.hostname;
   let content;
@@ -118,12 +78,14 @@ const App = () => {
     // if (domain.startsWith("localhost")) {
     content = (
       <Routes>
-        <Route path="/" element={<Inicio />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/empresas" element={<Empresas />} />
-        <Route path="/empresa" element={<CompanyData />} />
-        <Route path="/HomeBusiness" element={<HomeBusiness />} />
-        <Route path="/BusinessProducts" element={<BusinessProducts />} />
+        <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
+        <Route path="/sign-up/*" element={<SignUp routing="path" path="/sign-up" />} />
+        <Route path="/" element={<><Inicio /></>} />
+        <Route path="/login" element={<><SignedIn> <Login /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/empresas" element={<><SignedIn> <Empresas /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/empresa" element={<><SignedIn> <CompanyData /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/BusinessProducts" element={<><SignedIn> <BusinessProducts /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="*" element={<><SignedIn><Inicio /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
       </Routes>
     );
   } else {
@@ -131,14 +93,36 @@ const App = () => {
     let datos = obtenerDatosEmpresa(domain)
     content = (
       <Routes>
-        <Route path="/" element={<HomeBusiness empresa={datos} />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/empresas" element={<Empresas />} />
-        <Route path="/empresa" element={<CompanyData />} />
-        <Route path="/BusinessProducts" element={<BusinessProducts />} />
+        <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
+        <Route path="/sign-up/*" element={<SignUp routing="path" path="/sign-up" />} />
+        <Route path="/" element={<><HomeBusiness empresa={datos} /></>} />
+        <Route path="/login" element={<><SignedIn> <Login /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/empresas" element={<><SignedIn> <Empresas /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/empresa" element={<><SignedIn> <CompanyData /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/BusinessProducts" element={<><SignedIn> <BusinessProducts /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="*" element={<><Inicio /></>} />
       </Routes>
     );
   }
+
+  function ClerkProviderWithRoutes() {
+    const navigate = useNavigate();
+
+    return (
+      <ClerkProvider
+        localization={esES}
+        publishableKey={clerkPubKey}
+        navigate={(to) => navigate(to)}
+      >
+        <StyledWrapper>
+          <Navbar />
+          {content}
+        </StyledWrapper>
+        <Footer />
+      </ClerkProvider >
+    );
+  };
+
   return (
     <ThemeContextProvider>
       <CssBaseline />
@@ -149,12 +133,6 @@ const App = () => {
       </header>
       <BrowserRouter>
         <ClerkProviderWithRoutes />
-        <StyledWrapper>
-          <Navbar />
-          <ScrollToTop />
-          {content}
-        </StyledWrapper>
-        <Footer />
       </BrowserRouter>
     </ThemeContextProvider>
   );

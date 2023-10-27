@@ -19,12 +19,27 @@ export default function MyCard({ imageSrc, title, description, label, url }) {
     window.location.href = 'https://' + url;
   };
 
+  const cardMediaContainerStyle = {
+    width: 140, // Ancho deseado
+    height: 140, // Altura deseada
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  };
+
+  const cardMediaStyle = {
+    width: '100%', // Ancho deseado
+    height: '100%', // Altura deseada
+    objectFit: 'cover',
+  };
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
+          style={cardMediaStyle}
           image={imageSrc}
           alt={label}
         />

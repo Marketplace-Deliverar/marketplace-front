@@ -51,16 +51,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
 }));
 
-const Navbar = ({ userIsAuthenticated = true }) => {
+const Navbar = ({ userIsAuthenticated = false }) => {
   const navigate = useNavigate();
 
-  const [userType, setUserType] = useState("individuo");
-  const [isAuthenticated, setIsAuthenticated] = useState(userIsAuthenticated);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    const auth = localStorage.getItem('clerk-db-jwt');
+    const userType = localStorage.getItem('userType') !== null ? localStorage.getItem('userType') : "individuo";
+    if (auth) {
       switch (userType) {
         case "empresa":
           setMenuOptions([
@@ -78,7 +79,9 @@ const Navbar = ({ userIsAuthenticated = true }) => {
             },
             {
               label: "Cerrar sesión",
-              onClick: () => navigate("/"),
+              onClick: () => {
+                localStorage.clear(); setIsAuthenticated(false); window.location.reload();
+              },
             },
           ]);
           break;
@@ -95,7 +98,9 @@ const Navbar = ({ userIsAuthenticated = true }) => {
             },
             {
               label: "Cerrar sesión",
-              onClick: () => setIsAuthenticated(false),
+              onClick: () => {
+                localStorage.clear(); setIsAuthenticated(false); window.location.reload();
+              },
             },
           ]);
           break;
@@ -117,7 +122,7 @@ const Navbar = ({ userIsAuthenticated = true }) => {
         },
       ]);
     }
-  }, [isAuthenticated, userType]);
+  }, [isAuthenticated]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

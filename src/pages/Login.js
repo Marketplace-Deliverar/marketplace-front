@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Styling and icons
 import styled from "@emotion/styled";
@@ -29,6 +29,8 @@ import {
   registerUser,
 } from "../apis/authApis";
 import { useNavigate } from "react-router-dom";
+import { useUser } from '@clerk/clerk-react';
+
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -95,10 +97,12 @@ const StyledNamespaceFormControl = styled(FormControl)(({ theme }) => ({
 
 const Login = () => {
   const navigate = useNavigate();
-  const [isSignIn, setIsSignIn] = useState(true);
+  const [isSignIn, setIsSignIn] = useState(false);
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const user = useUser();
+  const user_id = user ? user.user.id : 'Usuario no autenticado';
 
   // SignUp only
   const [activeStep, setActiveStep] = useState(0);
@@ -134,6 +138,57 @@ const Login = () => {
     return true;
   };
 
+  const obtenerDatosUsuario = async (tipo_usuario, user_id) => {
+    try {
+      const response = await fetch(`https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws/${tipo_usuario}/${user_id}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Hubo un problema con la solicitud fetch:', error);
+      throw error;
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const datosUsuario = await obtenerDatosUsuario("usuarios", user_id);
+        const datosEmpresa = await obtenerDatosUsuario("empresas", user_id);
+
+        console.log(datosUsuario);
+        console.log(datosEmpresa);
+
+        if (!('error' in datosUsuario)) {
+          console.log('Usuario');
+          // window.location.href = 'https://' + window.location.hostname;
+          window.location.href = 'http://hola.localhost:3000';
+          localStorage.setItem('userType', 'individuo')
+        }
+
+        if (!('error' in datosEmpresa)) {
+          console.log('Empresa');
+          // window.location.href = 'https://' + window.location.hostname;
+          window.location.href = 'http://hola.localhost:3000';
+          localStorage.setItem('userType', 'empresa')
+        }
+      } catch (error) {
+        // Manejar el error, si es necesario
+      }
+    };
+
+    fetchData();
+  }, [user_id]);
+
   const resetValues = () => {
     setActiveStep(0);
     setCustomPaletteInput(false);
@@ -153,12 +208,13 @@ const Login = () => {
         password: passwordInput,
       });
       await loginUserPassword(emailInput, passwordInput)
-        .then(() => {})
+        .then(() => { })
         .catch((error) => console.error(error));
     } else {
       if (signUpUserInformation.type === "persona") {
         data = {
           ...signUpUserInformation,
+          uId: user_id,
           name: nameInput,
           surname: surnameInput,
           dni: dniInput,
@@ -173,10 +229,11 @@ const Login = () => {
       } else {
         data = {
           ...signUpUserInformation,
+          uId: user_id,
           name: nameInput,
           legalName: legalNameInput,
           cuil: cuilInput,
-          url: namespaceInput + ".deliverar.com.ar",
+          url: namespaceInput + ".marketplace.deliver.ar",
           address: addressInput,
           category: categoryInput,
           email: emailInput,
@@ -194,6 +251,11 @@ const Login = () => {
       setIsSignIn(true);
     }
 
+    console.log(signUpUserInformation.type)
+
+    // if (signUpUserInformation.type !== "persona") {
+    //   navigate("/BusinessProducts");
+    // }
     navigate("/", {
       // TODO: Props are not being recognized
       state: { userIsAuthenticated: true },
@@ -261,7 +323,6 @@ const Login = () => {
           variant="contained"
           onClick={(e) => handleSubmit(e, "signIn")}
           fullWidth
-          disabled={!isValidEmail(emailInput) || passwordInput === ""}
           my={3}
         >
           Ingresar
@@ -401,55 +462,6 @@ const Login = () => {
               onChange={(e) => setEmailInput(e.target.value)}
             />
           </FormControl>
-          <FormControl variant="standard" fullWidth required>
-            <InputLabel htmlFor="password">Clave</InputLabel>
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              value={passwordInput}
-              onChange={(e) => setPasswordInput(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-          <FormControl variant="standard" fullWidth required>
-            <InputLabel htmlFor="confirmPassword">Confirmar clave</InputLabel>
-            <Input
-              id="confirmPassword"
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPasswordInput}
-              error={formInputError}
-              onChange={(e) => {
-                setConfirmPasswordInput(e.target.value);
-                setFormInputError(e.target.value !== passwordInput);
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              aria-describedby="confirmPassword-helper-text"
-            />
-            <FormHelperText
-              error={formInputError}
-              id="confirmPassword-helper-text"
-            >
-              {formInputError && "Las contrasenas deben ser identicas"}
-            </FormHelperText>
-          </FormControl>
         </Box>
       );
     }
@@ -506,7 +518,7 @@ const Login = () => {
             fullWidth
             onChange={(e) => setNamespaceInput(e.target.value)}
           />
-          .deliverar.com.ar
+          .marketplace.deliver.ar
         </StyledNamespaceFormControl>
         <FormControl variant="standard" fullWidth required>
           <InputLabel htmlFor="address">Direccion</InputLabel>
@@ -544,57 +556,6 @@ const Login = () => {
             value={emailInput}
             onChange={(e) => setEmailInput(e.target.value)}
           />
-        </FormControl>
-        <FormControl variant="standard" fullWidth required>
-          <InputLabel htmlFor="password">Clave</InputLabel>
-          <Input
-            id="password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            value={passwordInput}
-            onChange={(e) => setPasswordInput(e.target.value)}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <FormControl variant="standard" fullWidth required>
-          <InputLabel htmlFor="confirmPassword">Confirmar clave</InputLabel>
-          <Input
-            id="confirmPassword"
-            name="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
-            value={confirmPasswordInput}
-            error={formInputError}
-            onChange={(e) => {
-              setConfirmPasswordInput(e.target.value);
-              setFormInputError(e.target.value !== passwordInput);
-            }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            aria-describedby="confirmPassword-helper-text"
-          />
-          <FormHelperText
-            error={formInputError}
-            id="confirmPassword-helper-text"
-          >
-            {formInputError && "Las contrasenas deben ser identicas"}
-          </FormHelperText>
         </FormControl>
         <FormGroup variant="standard" fullWidth>
           <FormControlLabel
@@ -721,22 +682,6 @@ const Login = () => {
                     type="submit"
                     form="signUpForm"
                     onClick={(e) => handleSubmit(e, "signUp")}
-                    disabled={
-                      formInputError ||
-                      (signUpUserInformation.type === "persona" &&
-                        (!surnameInput || !dniInput)) ||
-                      (signUpUserInformation.type === "empresa" &&
-                        (!legalNameInput ||
-                          !cuilInput ||
-                          !namespaceInput ||
-                          !categoryInput)) ||
-                      !nameInput ||
-                      !addressInput ||
-                      !emailInput ||
-                      !passwordInput ||
-                      !phoneInput ||
-                      !confirmPasswordInput
-                    }
                     variant="contained"
                   >
                     REGISTRARME
