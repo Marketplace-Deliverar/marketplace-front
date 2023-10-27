@@ -32,7 +32,7 @@ const filters = [
   {
     label: "Ordenar por:",
     type: "checkbox",
-    options: ["Más recientes", "Más vendidos", "nosemeocurre", "después distutimos los filtros"]
+    options: ["Más recientes", "Más vendidos"]
   },
 ];
 
