@@ -21,7 +21,7 @@ const filters = [
   {
     label: "Categorías",
     type: "autocomplete",
-    options: ["cat1", "cat2", "cat3"]
+    options: ["Teléfonos móviles", "Pequeños dispositivos", "Accesorios electrónicos", "Audio y sonido","Videojuegos"]
   },
   {
     label: "Precio",
