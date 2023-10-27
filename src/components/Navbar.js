@@ -1,11 +1,17 @@
-import React, { useState } from "react";
-import { AppBar, Container, Toolbar, InputBase, IconButton, styled } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  AppBar,
+  Container,
+  Toolbar,
+  InputBase,
+  IconButton,
+  styled,
+} from "@mui/material";
 import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import SearchIcon from "@mui/icons-material/Search";
 import MenuItem from "@mui/material/MenuItem";
-import logo from "../media/logo.svg"; 
-import { Link, useLocation } from "react-router-dom";
+import logo from "../media/logo.svg";
+import { Link, useNavigate } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
@@ -45,12 +51,73 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
 }));
 
-const Navbar = () => {
-  const location = useLocation();
+const Navbar = ({ userIsAuthenticated = true }) => {
+  const navigate = useNavigate();
 
   const [userType, setUserType] = useState("individuo");
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(userIsAuthenticated);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [menuOptions, setMenuOptions] = useState([]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      switch (userType) {
+        case "empresa":
+          setMenuOptions([
+            {
+              label: "Mis datos",
+              onClick: () => navigate("/"),
+            },
+            {
+              label: "Mis productos",
+              onClick: () => navigate("/"),
+            },
+            {
+              label: "Pedidos",
+              onClick: () => navigate("/"),
+            },
+            {
+              label: "Cerrar sesión",
+              onClick: () => navigate("/"),
+            },
+          ]);
+          break;
+
+        case "individuo":
+          setMenuOptions([
+            {
+              label: "Mi perfil",
+              onClick: () => navigate("/"),
+            },
+            {
+              label: "Mis pedidos",
+              onClick: () => navigate("/"),
+            },
+            {
+              label: "Cerrar sesión",
+              onClick: () => setIsAuthenticated(false),
+            },
+          ]);
+          break;
+
+        default:
+          setMenuOptions([
+            {
+              label: "Iniciar sesion / registrarse",
+              onClick: () => navigate("/login"),
+            },
+          ]);
+          break;
+      }
+    } else {
+      setMenuOptions([
+        {
+          label: "Iniciar sesion / registrarse",
+          onClick: () => navigate("/login"),
+        },
+      ]);
+    }
+  }, [isAuthenticated, userType]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -58,18 +125,6 @@ const Navbar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const getMenuOptions = () => {
-    if (isAuthenticated) {
-      if (userType === "empresa") {
-        return ["Mis Datos", "Mis Productos", "Pedidos", "Cerrar Sesión"];
-      } else if (userType === "individuo") {
-        return ["Mi Perfil", "Mis Pedidos", "Cerrar Sesión"];
-      }
-    } else {
-      return ["Iniciar Sesión", "Registrarme"];
-    }
   };
 
   return (
@@ -114,9 +169,15 @@ const Navbar = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            {getMenuOptions().map((option, index) => (
-              <MenuItem key={index} onClick={handleClose}>
-                {option}
+            {menuOptions.map((option, index) => (
+              <MenuItem
+                key={index}
+                onClick={() => {
+                  handleClose();
+                  option.onClick();
+                }}
+              >
+                {option.label}
               </MenuItem>
             ))}
           </Menu>

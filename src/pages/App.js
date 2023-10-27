@@ -8,9 +8,14 @@ import { styled } from "@mui/material/styles";
 // Custom components
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import NavbarBusiness from "../components/NavbarBusiness";
+import Login from "./Login";
+import HomeBusiness from "./HomeBusiness";
+import BusinessProducts from "./BusinessProducts";
 import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
 import Empresas from "./Empresas";
+import CompanyData from "./CompanyData";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -23,12 +28,8 @@ const StyledWrapper = styled(`div`)(({ theme }) => ({
   top: 1, // Asegura que el contenedor se expanda verticalmente
 }));
 
-
 const App = () => {
-
-
   return (
-
     <ThemeContextProvider>
       <CssBaseline />
       <header>
@@ -38,17 +39,20 @@ const App = () => {
       </header>
       <BrowserRouter>
         <StyledWrapper>
-            <Navbar />
+          <Navbar />
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Inicio />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/empresas" element={<Empresas />} />
+            <Route path="/empresa" element={<CompanyData />} />
+            <Route path="/HomeBusiness" element={<HomeBusiness />} />
+            <Route path="/BusinessProducts" element={<BusinessProducts />} />
           </Routes>
-          <Footer />
         </StyledWrapper>
+        <Footer />
       </BrowserRouter>
     </ThemeContextProvider>
-
   );
 };
 
