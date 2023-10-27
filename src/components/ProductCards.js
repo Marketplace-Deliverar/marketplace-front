@@ -55,7 +55,7 @@ export default function ProductCards({ empresa }) {
             <CardHeader title={card.titulo}  subheader={card.marca} />
             <CardMedia component="img" height="194" image={card.imagen} alt={card.uId} />
             <CardContent>
-              <Typography variant="h3" color="text.secondary">
+              <Typography variant="h6" color="text.secondary">
                 ${card.precio} 
               </Typography>
             </CardContent>
