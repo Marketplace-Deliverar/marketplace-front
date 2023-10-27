@@ -16,6 +16,7 @@ import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
 import Empresas from "./Empresas";
 import CompanyData from "./CompanyData";
+import ProductDetail from "./ProductDetail";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -51,28 +52,54 @@ const App = () => {
   let content;
 
   const obtenerDatosEmpresa = (dominio) => {
-    fetch(`https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws/empresas/url/${dominio}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
+    fetch(
+      `https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws/empresas/url/${dominio}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
       }
-    })
-      .then(response => {
+    )
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         // Aquí puedes trabajar con los datos recibidos en formato JSON
         console.log(data);
       })
-      .catch(error => {
-        console.error('Hubo un problema con la solicitud fetch:', error);
+      .catch((error) => {
+        console.error("Hubo un problema con la solicitud fetch:", error);
       });
-  }
+  };
 
-  console.log(domain)
+  console.log(domain);
+
+  let datos = obtenerDatosEmpresa("carrefour.marketplace.deliver.ar");
+  // let datos = obtenerDatosEmpresa(domain)
+  content = (
+    <Routes>
+      <Route
+        path="/*"
+        element={
+          domain.startsWith("localhost") ? (
+            <Inicio />
+          ) : (
+            <HomeBusiness empresa={datos} />
+          )
+        }
+      />
+      <Route path="/login" element={<Login />} />
+      <Route path="/empresas" element={<Empresas />} />
+      <Route path="/empresa" element={<CompanyData />} />
+      <Route path="/HomeBusiness" element={<HomeBusiness />} />
+      <Route path="/BusinessProducts" element={<BusinessProducts />} />
+      <Route path="/:cid/product/:pid" element={<ProductDetail />} />
+    </Routes>
+  );
 
   if (domain.startsWith("marketplace.deliver.ar")) {
     // if (domain.startsWith("localhost")) {

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+// Apis
+import { obtenerProductosPorEmpresa } from "../apis/productApis";
 
 // Styling and icons
 import styled from "@emotion/styled";
-import { Image } from "@mui/icons-material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 // Components
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
@@ -31,30 +32,48 @@ const StyledContainer = styled(`div`)({
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const mockedProduct = {
-  title: "Labial",
-  description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu congue nisi, ut pretium odio. Integer vestibulum condimentum metus. Maecenas tempus commodo condimentum. Vivamus ut augue sit amet sem vehicula fringilla. In pretium dui tortor, sed consequat mi dignissim ut. Cras molestie tempus lacus blandit lobortis. Phasellus nisi purus, viverra in vulputate interdum, posuere eu erat.
-
-In laoreet pharetra mauris, id tristique justo mollis eu. Duis non malesuada tortor, nec convallis tellus. Sed tristique viverra tincidunt. In sit amet tellus eu diam iaculis condimentum sit amet ut urna. Curabitur dignissim vulputate tristique. Duis gravida id sem vel viverra. Pellentesque bibendum pellentesque tellus id interdum. Quisque sit amet justo quis nisl lobortis pellentesque id nec quam. Sed sapien lorem, iaculis in consequat nec, bibendum a dui. In at erat scelerisque, aliquam dolor nec, posuere orci. Duis sem quam, convallis nec arcu a, maximus sagittis urna.`,
-  brand: "Clinique",
-  category: "Salud y belleza",
-  subCategory: "Maquillaje",
-  price: 800,
-  images: [
-    "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=formatt&fit=crop&w=400&h=400&q=60",
-    "https://images.unsplash.com/photo-1625093742435-6fa192b6fb10?auto=format&fit=crop&w=400&h=400&q=60",
-  ],
-  validateStock: true,
-  stock: 10,
-};
-
-const ProductDetails = () => {
+const ProductDetails = (props) => {
   const theme = useTheme();
+  const companyID = window.location.pathname.split("/")[1];
+  const productID = window.location.pathname.split("/")[3];
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading] = useState(false);
-  const [productData, setProductData] = useState(mockedProduct);
+  const [productData, setProductData] = useState({});
 
   // Lifecycle
+  useEffect(() => {
+    const fetchData = async () => {
+      await obtenerProductosPorEmpresa(companyID)
+        .then((data) => {
+          if (data) {
+            let product = data.find((item) => item.uId === productID);
+            product = {
+              title: product.titulo,
+              description: product.description,
+              brand: product.marca,
+              category: product.rubro,
+              subCategory: product.categoria,
+              price: product.precio,
+              images: [
+                "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=formatt&fit=crop&w=400&h=400&q=60",
+                "https://images.unsplash.com/photo-1625093742435-6fa192b6fb10?auto=format&fit=crop&w=400&h=400&q=60",
+              ],
+              validateStock: product.stock,
+              stock: product.nro_stock,
+            };
+            setProductData(product);
+          }
+          return;
+        })
+        .catch((error) => console.error(error));
+    };
+
+    if (!loading) {
+      setLoading(true);
+      fetchData();
+      setLoading(false);
+    }
+  }, []);
 
   // Extra functionallity
 
@@ -128,33 +147,28 @@ const ProductDetails = () => {
               index={activeStep}
               onChangeIndex={handleStepChange}
             >
-              {productData.images.map((step, index) => (
+              {productData.images?.map((step, index) => (
                 <div key={index}>
                   {activeStep - index <= 2 ? (
                     <Box
                       component="img"
                       src={step}
                       alt={productData.title}
-                      sx={{
-                        display: "block",
-                        maxWidth: 400,
-                        overflow: "hidden",
-                        width: "100%",
-                      }}
+                      sx={{ overflow: "hidden" }}
                     />
                   ) : null}
                 </div>
               ))}
             </AutoPlaySwipeableViews>
             <MobileStepper
-              steps={productData.images.length}
+              steps={productData.images?.length}
               position="static"
               activeStep={activeStep}
               nextButton={
                 <Button
                   size="small"
                   onClick={handleNext}
-                  disabled={activeStep === productData.images.length - 1}
+                  disabled={activeStep === productData.images?.length - 1}
                 >
                   Next
                   {theme.direction === "rtl" ? (

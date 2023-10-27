@@ -8,6 +8,7 @@ const urlWebServices = {
   obtenerRubros: urlApi + "productos/rubro",
   obtenerCategoriasPorRubro: urlApi + "/productos/rubro/",
   obtenerProductosEmpresa: urlApi + "/productos/empresa/",
+  Productos: urlApi + "/productos",
 };
 
 export default urlWebServices;
