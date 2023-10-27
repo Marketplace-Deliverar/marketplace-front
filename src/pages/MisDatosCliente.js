@@ -7,7 +7,7 @@ const MisDatosCliente = (props) => {
 
   return (
     <div>
-      <Tittle text='Mis Datos' color="#1976d2" align="center" padding="50px"></Tittle>
+      <Tittle text='Mis Datos' color="#1976d2" align="center" padding="60px"></Tittle>
       <DatosUsuario userId={uId} /> {/* Pasa uId como un parámetro a DatosUsuario */}
     </div>
   );

@@ -9,7 +9,11 @@ const urlWebServices = {
 
     //usuarios
     obtenerDatosUsuario: urlApi +"usuarios/",
-    editarDatosUsuario: urlApi +"usuarios/"
+    editarDatosUsuario: urlApi +"usuarios/",
+
+    //pedidos
+    obtenerPedidosUsuario: urlApi +"pedidos/usuario/",
+   
     
 }
 

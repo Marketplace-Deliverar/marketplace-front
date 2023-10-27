@@ -1,57 +1,71 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import zIndex from '@mui/material/styles/zIndex';
+import { obtenerPedidosUsuario } from '../controllers/pedidosController';
+import { styled } from '@mui/material/styles';
 
-function createData(idPedido, fecha, direccion, tiempo, estado, total) {
-  return { idPedido, fecha, direccion, tiempo, estado, total};
-}
+const tableContainerStyles = {
+  width: '80%',
+  margin: '0 auto',
+  paddingTop: '70px',
+  paddingBottom: '100px',
+  minHeight: 'calc(60vh - 60px)', // Ajusta la altura según tu necesidad
+};
 
-const rows = [
-  createData(1, "1/10/2023", "Lima 123", 12,"Entregado", "$100"),
-  createData(2, "15/10/2023", "Av. Cabildo 941", 15, "En camino", "$220"),
-  createData(3, "20/10/2023", "Bulnes 500", 26,"Entregado", "$110"),
-  createData(4, "30/10/2023", "Gorostiaga 1912",32, "Cancelado", "$150"),
-  createData(5, "4/11/2023", "Pueyrredon 1023", 40, "En camino", "$140"),
-];
+const ColoredTableCell = styled(TableCell)(({ theme }) => ({
+  color: theme.palette.primary.main,
+}));
 
-export default function DenseTable() {
+export default function ListaMisPedidos({ userId }) {
+  const [listaPedidos, setListaPedidos] = useState([]);
+
+  useEffect(() => {
+    async function fetchPedidos() {
+      try {
+        const pedidos = await obtenerPedidosUsuario(userId);
+        setListaPedidos(pedidos);
+        console.log(pedidos)
+      } catch (error) {
+        console.error("Error al obtener pedidos:", error);
+      }
+    }
+    fetchPedidos();
+  }, [userId]);
+
   return (
-    <TableContainer component={Paper} sx={{maxWidth:1500}} >
-      <Table sx={{ minWidth: 650, border: 2, marginBottom: 2, borderRadius: 2}} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID Pedido</TableCell>
-            <TableCell align="right">Fecha</TableCell>
-            <TableCell align="right">Dirección&nbsp;</TableCell>
-            <TableCell align="right">Tiempo de entrega (min)</TableCell>
-            <TableCell align="right">Estado</TableCell>
-            <TableCell align="right">Total</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.idPedido}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.idPedido}
-              </TableCell>
-              <TableCell align="right">{row.fecha}</TableCell>
-              <TableCell align="right">{row.direccion}</TableCell>
-              <TableCell align="right">{row.tiempo}</TableCell>
-              <TableCell align="right">{row.estado}</TableCell>
-              <TableCell align="right">{row.total}</TableCell>
+    <div style={tableContainerStyles}>
+      <TableContainer>
+        <Table sx={{ border: 2, marginBottom: 2, borderRadius: 2 }} size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <ColoredTableCell align="center">ID Pedido</ColoredTableCell>
+              <ColoredTableCell align="center">Estado</ColoredTableCell>
+              <ColoredTableCell align="center">Fecha Entrega</ColoredTableCell>
+              <ColoredTableCell align="center">Tiempo Entrega</ColoredTableCell>
+              <ColoredTableCell align="center">Estado Pago</ColoredTableCell>
+              <ColoredTableCell align="center">Total</ColoredTableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {listaPedidos.map((row) => (
+              <TableRow key={row.uId}>
+                <TableCell align="center" component="th" scope="row">
+                  {row.uId}
+                </TableCell>
+                <TableCell align="center">{row.estado}</TableCell>
+                <TableCell align="center">{row.fecha_entrega}</TableCell>
+                <TableCell align="center">{row.tiempo_delivery}</TableCell>
+                <TableCell align="center"> {row.pagado ? 'Pago' : 'Sin pagar'}</TableCell>
+                <TableCell align="center">{row.total}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }
