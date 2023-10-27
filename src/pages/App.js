@@ -56,8 +56,8 @@ const App = () => {
 
   console.log(domain)
 
-  if (domain.startsWith("marketplace.deliver.ar")) {
-    // if (domain.startsWith("localhost")) {
+  // if (domain.startsWith("marketplace.deliver.ar")) {
+    if (domain.startsWith("localhost")) {
     content = (
       <Routes>
         <Route path="/" element={<Inicio />} />
@@ -69,8 +69,8 @@ const App = () => {
       </Routes>
     );
   } else {
-    // let datos = obtenerDatosEmpresa("carrefour.marketplace.deliver.ar")
-    let datos = obtenerDatosEmpresa(domain)
+    let datos = obtenerDatosEmpresa("carrefour.marketplace.deliver.ar")
+    // let datos = obtenerDatosEmpresa(domain)
     content = (
       <Routes>
         <Route path="/" element={<HomeBusiness empresa={datos} />} />
