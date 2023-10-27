@@ -15,7 +15,7 @@ import {obtenerProductosEmpresa} from "../controllers/productoController"
 import { useNavigate } from "react-router-dom";
 
 
-export default function ProductCards() {
+export default function ProductCards({empresa}) {
 
   const navigate = useNavigate()
 
@@ -35,7 +35,7 @@ export default function ProductCards() {
   }, []);
 
   const handleCardClick = (cardId) => {
-    navigate("/1849171299/product/"+ cardId)
+    navigate("/" + empresa.uid + "/product/"+ cardId)
     //aca va la opcion de redirigir
     console.log(`Clic en tarjeta ${cardId}`);
   };

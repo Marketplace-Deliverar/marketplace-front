@@ -3,18 +3,23 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import {Button, CardActionArea, CardActions } from '@mui/material';
+import { Button, CardActionArea, CardActions } from '@mui/material';
 
 
-export default function MyCard({ imageSrc, title, description, label }) {
+export default function MyCard({ imageSrc, title, description, label, url }) {
 
   const titleStyle = {
-    fontSize: '18px', 
-    color: '#1976d2', 
+    fontSize: '18px',
+    color: '#1976d2',
     fontFamily: 'Montserrat, sans-serif',
   };
 
-  return (   
+  const handleClick = () => {
+    // window.location.href = 'http://hola.localhost:3000';
+    window.location.href = 'https://' + url;
+  };
+
+  return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
@@ -33,7 +38,7 @@ export default function MyCard({ imageSrc, title, description, label }) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" style={{ fontWeight: 'bold', fontFamily: 'Montserrat, sans-serif'}}>Ver Más</Button>
+        <Button onClick={handleClick} size="small" style={{ fontWeight: 'bold', fontFamily: 'Montserrat, sans-serif' }}>Ver Más</Button>
       </CardActions>
     </Card>
   );
