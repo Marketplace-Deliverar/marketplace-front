@@ -79,6 +79,7 @@ const App = () => {
         <Route path="/login" element={<><SignedIn> <Login /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresas" element={<><SignedIn> <Empresas /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresa" element={<><SignedIn> <CompanyData /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/:cid/product/:pid" element={<><SignedIn><ProductDetail /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/usuarios/:uId" element={<><SignedIn><MisDatosCliente /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/pedidos/usuario/:uId" element={<><SignedIn><MisPedidosCliente /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="*" element={<><Inicio /></>} />
