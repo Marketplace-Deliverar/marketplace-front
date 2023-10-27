@@ -45,7 +45,7 @@ export default function ListaMisPedidos({ userId }) {
               <ColoredTableCell align="center">ID Pedido</ColoredTableCell>
               <ColoredTableCell align="center">Estado</ColoredTableCell>
               <ColoredTableCell align="center">Fecha Entrega</ColoredTableCell>
-              <ColoredTableCell align="center">Tiempo Entrega</ColoredTableCell>
+              <ColoredTableCell align="center">Tiempo Entrega (min)</ColoredTableCell>
               <ColoredTableCell align="center">Estado Pago</ColoredTableCell>
               <ColoredTableCell align="center">Total</ColoredTableCell>
             </TableRow>
