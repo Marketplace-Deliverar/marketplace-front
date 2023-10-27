@@ -13,7 +13,8 @@ import Input from '@mui/material/Input';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import Modal from "@mui/material/Modal";
 import {obtenerEmpresa, actualizarEmpresa } from "../controllers/empresasController";
-import {obtenerRubros} from "../controllers/marcasController"
+import {obtenerRubros} from "../controllers/marcasController";
+import { useNavigate } from "react-router-dom";
 
 const CompanyData = () => {
     const [age, setAge] = useState("");
@@ -25,11 +26,16 @@ const CompanyData = () => {
     const [cuit, setCuit] = useState(""); 
     const [email, setEmail] = useState(""); 
     const [telefonoCelular, setTelefonoCelular] = useState(""); 
-    const [direccion, setDireccion] = useState(""); 
+    const [direccion, setDireccion] = useState("");
+    const navigate = useNavigate();
 
 
     const handleChangeRubro = (event) => {
         setSelectRubros(event.target.value); 
+    };
+
+    const handleClick = () => {
+      navigate("/BusinessProducts")
     };
 
     const handleSubmit = async () => {
@@ -59,7 +65,7 @@ const CompanyData = () => {
     useEffect(() => {
         async function fetchData() {
           try {
-            const empresa = await obtenerEmpresa(186);
+            const empresa = await obtenerEmpresa(1849171299);
             setDatosEmpresa(empresa);
             setSelectRubros(empresa.rubro);
             setRazonSocial(empresa.razon_social);
@@ -129,7 +135,7 @@ const CompanyData = () => {
                 </Button>
               </Box>
               <Box>
-                <Button variant="text">
+                <Button variant="text" onClick={handleClick}>
                   <Typography
                     variant="inherit"
                     style={{
