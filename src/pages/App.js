@@ -8,10 +8,14 @@ import { styled } from "@mui/material/styles";
 // Custom components
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import NavbarBusiness from "../components/NavbarBusiness";
+import Login from "./Login";
+import HomeBusiness from "./HomeBusiness";
+import BusinessProducts from "./BusinessProducts";
 import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
 import Empresas from "./Empresas";
-import Login from "./Login";
+import CompanyData from "./CompanyData";
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -41,6 +45,9 @@ const App = () => {
             <Route path="/" element={<Inicio />} />
             <Route path="/login" element={<Login />} />
             <Route path="/empresas" element={<Empresas />} />
+            <Route path="/empresa" element={<CompanyData />} />
+            <Route path="/HomeBusiness" element={<HomeBusiness />} />
+            <Route path="/BusinessProducts" element={<BusinessProducts />} />
           </Routes>
         </StyledWrapper>
         <Footer />
