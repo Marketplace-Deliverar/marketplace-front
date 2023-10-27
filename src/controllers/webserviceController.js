@@ -3,11 +3,19 @@ const urlApi =
 console.log("url", urlApi);
 
 const urlWebServices = {
-  //marcas o empresas
-  obtenerEmpresas: urlApi + "empresas",
-  obtenerRubros: urlApi + "productos/rubro",
-  obtenerCategoriasPorRubro: urlApi + "/productos/rubro/",
-  obtenerProductosEmpresa: urlApi + "/productos/empresa/",
-};
+
+    //marcas o empresas
+    obtenerEmpresas: urlApi +"empresas",
+    obtenerRubros: urlApi +"productos/rubro",
+
+    //usuarios
+    obtenerDatosUsuario: urlApi +"usuarios/",
+    editarDatosUsuario: urlApi +"usuarios/",
+
+    //pedidos
+    obtenerPedidosUsuario: urlApi +"pedidos/usuario/",
+   
+    
+}
 
 export default urlWebServices;
