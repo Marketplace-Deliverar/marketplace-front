@@ -16,6 +16,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useNavigate } from "react-router-dom";
 
 
 export default function BusinessProducts() {
@@ -32,6 +33,11 @@ export default function BusinessProducts() {
   const [descripcion, setDescripcion] = useState("");
   const [precio, setPrecio] = useState("");
   const [stockNumber, setStockNumber] = useState("");
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/empresa")
+  };
 
   const formRef = useRef(null);
 
@@ -139,7 +145,7 @@ export default function BusinessProducts() {
           }}
         >
           <Box sx={{ marginBottom: 1 }}>
-            <Button variant="text">
+            <Button variant="text" onClick={handleClick}>
               <Typography
                 variant="inherit"
                 style={{

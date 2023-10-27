@@ -29,8 +29,8 @@ export default function MyCard({ imageSrc, title, description, label, url }) {
   };
 
   const cardMediaStyle = {
-    width: '100%', // Ancho deseado
-    height: '100%', // Altura deseada
+    width: '100%', 
+    height: '200px',
     objectFit: 'cover',
   };
 
