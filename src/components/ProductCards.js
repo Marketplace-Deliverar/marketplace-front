@@ -48,23 +48,15 @@ export default function ProductCards({ empresa }) {
 
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
       {listaProductos.map((card) => (
         <div key={card.uId} onClick={() => handleCardClick(card.uId)}>
-          <Card key={card.uId} sx={{ width: 345, height: 400, margin: '16px' }}>
-            <CardHeader
-              title={card.titulo}
-              subheader={card.marca}
-            />
-            <CardMedia
-              component="img"
-              height="194"
-              image={card.imagen}
-              alt={card.uId}
-            />
+          <Card key={card.uId} sx={{ width: 345, height: 400, margin: "16px" }}>
+            <CardHeader title={card.titulo}  subheader={card.marca} />
+            <CardMedia component="img" height="194" image={card.imagen} alt={card.uId} />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                {card.description}
+                {card.precio} 
               </Typography>
             </CardContent>
             <CardActions disableSpacing>

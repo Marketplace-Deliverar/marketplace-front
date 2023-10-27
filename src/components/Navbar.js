@@ -90,11 +90,11 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor = "#1976d2" }) => {
           setMenuOptions([
             {
               label: "Mi perfil",
-              onClick: () => navigate("/"),
+              onClick: () => navigate("/usuarios/user_2XLq6Lb94pRk43JtdRmRI0e0PkU"),
             },
             {
               label: "Mis pedidos",
-              onClick: () => navigate("/"),
+              onClick: () => navigate("/pedidos/usuario/8337531602"),
             },
             {
               label: "Cerrar sesión",
