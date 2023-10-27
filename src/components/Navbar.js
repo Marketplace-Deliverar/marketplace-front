@@ -51,7 +51,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
 }));
 
-const Navbar = ({ userIsAuthenticated = false, navBarColor = "#1976d2" }) => {
+const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
   const navigate = useNavigate();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
