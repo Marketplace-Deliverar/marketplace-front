@@ -16,6 +16,8 @@ import ScrollToTop from "../components/ScrollToTop";
 import Inicio from "./Inicio";
 import Empresas from "./Empresas";
 import CompanyData from "./CompanyData";
+import MisDatosCliente from "./MisDatosCliente";
+import MisPedidosCliente from "./MisPedidosCliente"
 import ProductDetail from "./ProductDetail";
 
 // Components
@@ -63,6 +65,8 @@ const App = () => {
         <Route path="/empresa" element={<><SignedIn> <CompanyData /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/BusinessProducts" element={<><SignedIn> <BusinessProducts /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/:cid/product/:pid" element={<><SignedIn><ProductDetail /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/usuarios/:uId" element={<><SignedIn><MisDatosCliente /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/pedidos/usuario/:uId" element={<><SignedIn><MisPedidosCliente /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="*" element={<><SignedIn><Inicio /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
       </Routes>
     );
@@ -75,8 +79,8 @@ const App = () => {
         <Route path="/login" element={<><SignedIn> <Login /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresas" element={<><SignedIn> <Empresas /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresa" element={<><SignedIn> <CompanyData /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
-        <Route path="/BusinessProducts" element={<><SignedIn> <BusinessProducts /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
-        <Route path="/:cid/product/:pid" element={<><SignedIn><ProductDetail /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/usuarios/:uId" element={<><SignedIn><MisDatosCliente /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
+        <Route path="/pedidos/usuario/:uId" element={<><SignedIn><MisPedidosCliente /></SignedIn><SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="*" element={<><Inicio /></>} />
       </Routes>
     );
