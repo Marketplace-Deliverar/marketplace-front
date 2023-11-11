@@ -19,6 +19,7 @@ import CompanyData from "./CompanyData";
 import MisDatosCliente from "./MisDatosCliente";
 import MisPedidosCliente from "./MisPedidosCliente"
 import ProductDetail from "./ProductDetail";
+import CarritoCompras from './CarritoCompras';
 
 // Components
 import { CssBaseline } from "@mui/material";
@@ -67,6 +68,7 @@ const App = () => {
         <Route path="/:cid/product/:pid" element={<ProductDetail />} />
         <Route path="/usuarios/:uId" element={<MisDatosCliente />} />
         <Route path="/pedidos/usuario/:uId" element={<MisPedidosCliente />} />
+        <Route path="/carrito" element={<CarritoCompras />} />
         <Route path="*" element={<Inicio />} />
       </Routes>
     );
@@ -83,6 +85,7 @@ const App = () => {
         <Route path="/:cid/product/:pid" element={<ProductDetail />} />
         <Route path="/usuarios/:uId" element={<MisDatosCliente />} />
         <Route path="/pedidos/usuario/:uId" element={<MisPedidosCliente />} />
+        <Route path="/carrito" element={<CarritoCompras />} />
         <Route path="*" element={<><Inicio /></>} />
       </Routes>
     );

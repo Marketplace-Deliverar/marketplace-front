@@ -145,6 +145,7 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
               size="large"
               aria-label="Carrito de compras"
               color="inherit"
+              onClick={() => navigate("/carrito")}
             >
               <ShoppingCartIcon />
             </IconButton>
