@@ -83,13 +83,10 @@ export const Carrito = () => {
         <Grid item xs={12} sm={4}>
           <Box style={{ backgroundColor: '#f5f5f5', padding: '20px' }}>
             <Typography variant="h5" gutterBottom style={{ color: '#1976d2', textTransform: 'capitalize', fontWeight: 'bold', marginBottom: '30px' }}>
-              Resumen del Carrito
+              Resumen de Compra
             </Typography>
             <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '10px' }}>
               Total: ${calcularTotal().toFixed(2)}
-            </Typography>
-            <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '10px' }}>
-              Tiempo estimado de entrega:
             </Typography>
             <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '30px' }}>
               Robot a cargo de la entrega:
