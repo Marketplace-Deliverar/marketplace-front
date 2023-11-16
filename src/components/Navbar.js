@@ -54,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
   const navigate = useNavigate();
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
 
