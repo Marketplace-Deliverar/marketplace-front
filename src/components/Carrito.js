@@ -1,15 +1,38 @@
-import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Typography, Box, Button, Grid } from '@mui/material';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Avatar,
+  Typography,
+  Box,
+  Button,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
-export const Carrito = () => {
-  const [carrito, setCarrito] = React.useState([
+const Carrito = () => {
+  const [carrito, setCarrito] = useState([
     { id: 1, nombre: 'Camiseta', precio: 20, cantidad: 1, imagen: 'url_de_tu_imagen_camiseta.jpg' },
     { id: 2, nombre: 'Zapatos', precio: 50, cantidad: 1, imagen: 'url_de_tu_imagen_zapatos.jpg' },
     // Otros productos en el carrito
   ]);
+  const navigate = useNavigate();
+
+  const [openPopup, setOpenPopup] = useState(false);
 
   const removeFromCart = (productId) => {
     const updatedCarrito = carrito.filter((producto) => producto.id !== productId);
@@ -32,6 +55,14 @@ export const Carrito = () => {
 
   const calcularTotal = () => {
     return carrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
+  };
+
+  const handleClickOpenPopup = () => {
+    setOpenPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setOpenPopup(false);
   };
 
   return (
@@ -91,9 +122,24 @@ export const Carrito = () => {
             <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '30px' }}>
               Robot a cargo de la entrega:
             </Typography>
-            <Button variant="contained" color="primary" style={{ textTransform: 'capitalize' }}>
+            <Button variant="contained" color="primary" style={{ textTransform: 'capitalize' }} onClick={handleClickOpenPopup}>
               Finalizar Compra
             </Button>
+
+            {/* Ventana emergente */}
+            <Dialog open={openPopup} onClose={handleClosePopup}>
+              <DialogTitle>¡Gracias por realizar tu Compra!</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Tu factura estará disponible en la sección "Mis Pedidos" en los próximos días
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button color="primary" onClick={() => navigate("/")}>
+                  Aceptar
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Box>
         </Grid>
       </Grid>

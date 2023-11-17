@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Apis
 import { obtenerProductosPorEmpresa } from "../apis/productApis";
@@ -39,9 +38,7 @@ const ProductDetails = (props) => {
   const productID = window.location.pathname.split("/")[3];
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading] = useState(false);
-  const [productData, setProductData] = useState({}); 
-  const navigate = useNavigate();
-
+  const [productData, setProductData] = useState({});
 
   // Lifecycle
   useEffect(() => {
