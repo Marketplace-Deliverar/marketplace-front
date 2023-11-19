@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useNavigate } from "react-router-dom";
+import { Container } from "@mui/material";
 
 
 export default function BusinessProducts() {
@@ -33,11 +34,41 @@ export default function BusinessProducts() {
   const [descripcion, setDescripcion] = useState("");
   const [precio, setPrecio] = useState("");
   const [stockNumber, setStockNumber] = useState("");
+  const [file, setFile] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate("/empresa")
   };
+
+  // Cloudinary Upload
+  const handleFileUpload = (event) => {
+    setFile(event.target.files[0])
+    uploadFile(event.target.files[0])
+    console.log(event.target.files[0])
+  }
+
+  function uploadFile(file) {
+    const url = `https://api.cloudinary.com/v1_1/daykon/upload`;
+    const fd = new FormData();
+    fd.append('upload_preset', 'jmtb9sl5');
+    fd.append('tags', 'integracion_aplicaciones');
+    fd.append('file', file);
+  
+    fetch(url, {
+      method: 'POST',
+      body: fd,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const url = data.secure_url;
+        setFileUrl(url);
+      })
+      .catch((error) => {
+        console.error('Error uploading the file:', error);
+      });
+  }
 
   const formRef = useRef(null);
 
@@ -52,18 +83,18 @@ export default function BusinessProducts() {
   const handleChangeCategoria = (event) => {
     setSelectCategorias(event.target.value); 
   };
-
   
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget); 
+    console.log(data);
     const newData = {
       id_empresa: "1849171299",
       titulo: data.get('titulo'),
       marca: data.get('marca'),
       description: data.get('descripcion'),
       precio: parseInt(data.get('precio'), 10),
-      imagen: '',
+      imagen: fileUrl,
       rubro: selectedRubros,
       categoria: selectedCategorias,
       stock: stock,
@@ -129,8 +160,6 @@ export default function BusinessProducts() {
     setIsModalOpen(false);
   }
 
-
-  
   return (
     <Box sx={{ marginY: 4 }}>
     <Grid container spacing={2}>
@@ -254,15 +283,18 @@ export default function BusinessProducts() {
                 </Select>
               </FormControl>
               <TextField fullWidth id="numeroStock" name="numeroStock" label="Stock" variant="outlined" sx={{marginTop: 2}} />
-            <label htmlFor="icon-button-file" > 
-                <Input accept="image/*" id="icon-button-file" type="file" sx={{marginTop: 2}}/>
-                <IconButton color="primary" aria-label="upload picture" component="span">
-                  <PhotoCameraIcon />
-                </IconButton>
-              </label>
-              <Button variant="contained" sx={{ marginTop: 2 }} type="submit">
+              <Box sx={{marginTop: 2}}>
+                <Input accept="image/*" id="icon-button-file" type="file" sx={{marginTop: 2, display: 'none'}} onChange={handleFileUpload}/>
+                <label htmlFor="icon-button-file" >
+                  <Button variant="contained" component="span" startIcon={<PhotoCameraIcon />}>
+                    Agregar Foto
+                  </Button>
+                  <Typography>{file.name}</Typography>
+                </label>
+              </Box>
+            <Button variant="contained" sx={{ marginTop: 2 }} type="submit">
                 Guardar
-              </Button>
+            </Button>
           </Box>
         </Modal>
         <Box sx={{ margin: 2, borderRadius: 2}}>
