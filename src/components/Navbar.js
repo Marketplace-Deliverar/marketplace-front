@@ -6,6 +6,7 @@ import {
   InputBase,
   IconButton,
   styled,
+  Typography
 } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -52,17 +53,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
+  
   const navigate = useNavigate();
 
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
+  let userData = localStorage.getItem('user') !== null ? localStorage.getItem('user') : undefined;
+  if (userData){ userData = JSON.parse(userData)}
 
   useEffect(() => {
-    const auth = localStorage.getItem('clerk-db-jwt');
-    const userType = localStorage.getItem('userType') !== null ? localStorage.getItem('userType') : "individuo";
-    if (auth) {
-      switch (userType) {
+
+    if (userData) {
+      switch (userData.type) {
         case "empresa":
           setMenuOptions([
             {
@@ -90,11 +93,11 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
           setMenuOptions([
             {
               label: "Mi perfil",
-              onClick: () => navigate("/usuarios/user_2XLq6Lb94pRk43JtdRmRI0e0PkU"),
+              onClick: () => navigate("/usuarios/user_2XLq6Lb94pRk43JtdRmRI0e0PkU"), //dni
             },
             {
               label: "Mis pedidos",
-              onClick: () => navigate("/pedidos/usuario/8337531602"),
+              onClick: () => navigate("/pedidos/usuario/8337531602"), //dni
             },
             {
               label: "Cerrar sesión",
@@ -140,6 +143,9 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            ¡Bienvenida {userData?.name}!
+          </Typography>
           {isAuthenticated && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión
             <IconButton
               size="large"
@@ -160,6 +166,7 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
           >
             <AccountCircle />
           </IconButton>
+
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}

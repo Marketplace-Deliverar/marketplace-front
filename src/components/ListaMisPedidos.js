@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Snackbar from '@mui/material/Snackbar'; // Importa el componente Snackbar
+import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close'; // Importa el ícono de cierre
+import CloseIcon from '@mui/icons-material/Close';
 import { obtenerPedidosUsuario } from '../controllers/pedidosController';
 import { styled } from '@mui/material/styles';
 import GetAppIcon from '@mui/icons-material/GetApp';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
 const tableContainerStyles = {
   width: '60%',
@@ -22,11 +24,13 @@ const tableContainerStyles = {
 
 const ColoredTableCell = styled(TableCell)(({ theme }) => ({
   color: theme.palette.primary.main,
+  padding: '12px', // Ajusta este valor según sea necesario
 }));
 
 export default function ListaMisPedidos({ userId }) {
   const [listaPedidos, setListaPedidos] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const navigate = useNavigate();
 
   async function fetchPedidos() {
     try {
@@ -42,26 +46,23 @@ export default function ListaMisPedidos({ userId }) {
   }, [userId]);
 
   function descargarArchivo(nombreArchivo) {
-    // Verifica si el archivo está disponible
     if (nombreArchivo) {
-      // Reemplaza 'URL_DEL_SERVIDOR' con la URL real de tus archivos
       const urlArchivo = `URL_DEL_SERVIDOR/${nombreArchivo}`;
-
-      // Crea un enlace temporal para descargar el archivo
       const link = document.createElement('a');
       link.href = urlArchivo;
       link.download = nombreArchivo;
-
-      // Simula un clic en el enlace para iniciar la descarga
       link.click();
     } else {
-      // Muestra el Snackbar si el archivo no está disponible
       setSnackbarOpen(true);
     }
   }
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
+  };
+
+  const handleCarritoClick = () => {
+    navigate('/');
   };
 
   return (
@@ -71,29 +72,30 @@ export default function ListaMisPedidos({ userId }) {
           <TableHead>
             <TableRow>
               <ColoredTableCell align="center">ID Pedido</ColoredTableCell>
-              <ColoredTableCell align="center">Estado</ColoredTableCell>
               <ColoredTableCell align="center">Estado Pago</ColoredTableCell>
               <ColoredTableCell align="center">Total</ColoredTableCell>
               <ColoredTableCell align="center">Descargar Factura</ColoredTableCell>
+              <ColoredTableCell align="center">Estado Pedido</ColoredTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listaPedidos.map((row) => (
               <TableRow key={row.uId}>
-                <TableCell align="center" component="th" scope="row">
+                <ColoredTableCell align="center" component="th" scope="row">
                   {row.uId}
-                </TableCell>
-                <TableCell align="center">{row.estado}</TableCell>
-                <TableCell align="center">{row.pagado ? 'Pago' : 'Sin pagar'}</TableCell>
-                <TableCell align="center">{row.total}</TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    color="primary"
-                    onClick={() => descargarArchivo(row.nombreArchivo)}
-                  >
+                </ColoredTableCell>
+                <ColoredTableCell align="center">{row.pagado ? 'Pago' : 'Sin pagar'}</ColoredTableCell>
+                <ColoredTableCell align="center">{row.total}</ColoredTableCell>
+                <ColoredTableCell align="center">
+                  <IconButton color="primary" onClick={() => descargarArchivo(row.nombreArchivo)}>
                     <GetAppIcon />
                   </IconButton>
-                </TableCell>
+                </ColoredTableCell>
+                <ColoredTableCell align="center">
+                  <IconButton color="primary" onClick={handleCarritoClick}>
+                    <LocalShippingIcon />
+                  </IconButton>
+                </ColoredTableCell>
               </TableRow>
             ))}
           </TableBody>

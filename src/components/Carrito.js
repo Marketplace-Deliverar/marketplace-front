@@ -19,6 +19,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  TextField
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -31,6 +32,7 @@ const Carrito = () => {
     // Otros productos en el carrito
   ]);
   const navigate = useNavigate();
+  const [loteValue, setLoteValue] = useState('');
 
   const [openPopup, setOpenPopup] = useState(false);
 
@@ -59,11 +61,20 @@ const Carrito = () => {
 
   const handleClickOpenPopup = () => {
     setOpenPopup(true);
+    console.log('Ir a Pagar');
   };
 
   const handleClosePopup = () => {
     setOpenPopup(false);
   };
+
+  const handleInputChange = (event) => {
+    // Aquí puedes manejar la lógica de validación o realizar acciones adicionales
+    const inputValue = event.target.value;
+    setLoteValue(inputValue);
+  };
+
+
 
   return (
     <div style={{ margin: '0 40px', marginBottom: '40px' }}>
@@ -113,18 +124,43 @@ const Carrito = () => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <Box style={{ backgroundColor: '#f5f5f5', padding: '20px' }}>
-            <Typography variant="h5" gutterBottom style={{ color: '#1976d2', textTransform: 'capitalize', fontWeight: 'bold', marginBottom: '30px' }}>
+            <Typography variant="h6" gutterBottom style={{ color: '#1976d2', textTransform: 'capitalize', fontWeight: 'bold', marginBottom: '30px' }}>
               Resumen de Compra
             </Typography>
-            <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '10px' }}>
+            <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '20px' }}>
               Total: ${calcularTotal().toFixed(2)}
             </Typography>
-            <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '30px' }}>
-              Robot a cargo de la entrega:
+
+            <Typography variant="body1" gutterBottom style={{ color: '#1976d2' }}>
+              Ingrese Lote:
             </Typography>
-            <Button variant="contained" color="primary" style={{ textTransform: 'capitalize' }} onClick={handleClickOpenPopup}>
-              Finalizar Compra
-            </Button>
+
+            <TextField
+              required
+              label="Ingrese Lote"
+              name='Ingrese lote'
+              type="number"
+              InputProps={{
+                inputProps: {
+                  min: 1,
+                  max: 99,
+                },
+              }}
+              onChange={handleInputChange}
+              style={{ marginBottom: '40px', marginTop: '5px', width: '200px', }} 
+              fullWidth
+            />
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ textTransform: 'capitalize' }}
+                onClick={handleClickOpenPopup}
+                disabled={!loteValue.trim()}
+              >
+                Ir a Pagar
+              </Button>
+            </div>
 
             {/* Ventana emergente */}
             <Dialog open={openPopup} onClose={handleClosePopup}>

@@ -12,6 +12,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { useTheme } from "@emotion/react";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
+import Link from "@mui/material";
 import {
   Box,
   Button,
@@ -20,6 +21,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -39,6 +41,7 @@ const ProductDetails = (props) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading] = useState(false);
   const [productData, setProductData] = useState({});
+  const navigate = useNavigate();
 
   // Lifecycle
   useEffect(() => {
@@ -131,7 +134,7 @@ const ProductDetails = (props) => {
               ${productData.price}
             </Typography>
             <Button variant="contained" mb={2}>
-              Comprar
+                Comprar
             </Button>
           </Grid>
           <Grid

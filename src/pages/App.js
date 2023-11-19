@@ -54,8 +54,17 @@ const App = () => {
   const [navbarColor, setNavbarColor] = React.useState("#1976d2")
   const domain = window.location.hostname;
   let content;
+  let userData = {
+    name: "Antonela",
+    type: "individuo",
+    mail: "antonella@gmail.com",
+    dni: "123456",
+  }
+  localStorage.setItem('user', JSON.stringify(userData)) 
 
-  if (domain.startsWith("marketplace.deliver.ar")) {
+   //if (domain.startsWith("marketplace.deliver.ar")) {
+   
+  if (domain.startsWith("localhost")) {
     content = (
       <Routes>
         <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
@@ -73,11 +82,12 @@ const App = () => {
       </Routes>
     );
   } else {
+    let domain2 = "fravega.marketplace.deliver.ar"
     content = (
       <Routes>
         <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
         <Route path="/sign-up/*" element={<SignUp routing="path" path="/sign-up" />} />
-        <Route path="/" element={<><HomeBusiness empresaURL={domain} setNavBarColor={setNavbarColor} /></>} />
+        <Route path="/" element={<><HomeBusiness empresaURL={domain2} setNavBarColor={setNavbarColor} /></>} />
         <Route path="/login" element={<><SignedIn> <Login /> </SignedIn> <SignedOut><RedirectToSignIn /></SignedOut></>} />
         <Route path="/empresas" element={<Empresas />} />
         <Route path="/empresa" element={<CompanyData />} />
