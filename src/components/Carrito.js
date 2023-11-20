@@ -24,38 +24,32 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import { useCartContext } from '../context/CartContextProvider';
 
-const Carrito = ({carrito=[], setCarrito}) => {
+const Carrito = () => {
+  const { cart, removeFromCart, clearCart, updateCart } = useCartContext();
   const location = useLocation();
   const navigate = useNavigate();
   const [openPopup, setOpenPopup] = useState(false);
   const [loteValue, setLoteValue] = useState('');
-  console.log("llego al carrito", carrito);
-
-  const removeFromCart = (productId) => {
-    const updatedCarrito = carrito.filter((producto) => producto.id !== productId);
-    setCarrito(updatedCarrito);
-  };
 
   const incrementItem = (productId) => {
-    const updatedCarrito = carrito.map((producto) =>
+    const updatedCarrito = cart.map((producto) =>
       producto.id === productId ? { ...producto, cantidad: producto.cantidad + 1 } : producto
     );
-    setCarrito(updatedCarrito);
+    updateCart(updatedCarrito);
   };
 
   const decrementItem = (productId) => {
-    const updatedCarrito = carrito.map((producto) =>
+    const updatedCarrito = cart.map((producto) =>
       producto.id === productId && producto.cantidad > 1 ? { ...producto, cantidad: producto.cantidad - 1 } : producto
     );
-    setCarrito(updatedCarrito);
+    updateCart(updatedCarrito);
   };
 
   const calcularTotal = () => {
-    return carrito.reduce((total, producto) => total + producto.price * producto.cantidad, 0);
-  }; 
-  
-
+    return cart.reduce((total, producto) => total + producto.price * producto.cantidad, 0);
+  };
 
   const handleClickOpenPopup = () => {
     setOpenPopup(true);
@@ -88,8 +82,8 @@ const Carrito = ({carrito=[], setCarrito}) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {carrito?.map((productData) => (
-                    <TableRow key={productData?.uId}>
+                  {cart?.map((productData) => (
+                    <TableRow key={productData?.id}>
                       <TableCell>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                           {productData?.images && productData.images[0] && (
@@ -102,13 +96,13 @@ const Carrito = ({carrito=[], setCarrito}) => {
                       <TableCell align="center">${productData.price.toFixed(2)}</TableCell>
                       <TableCell align="center">${(productData.price * productData.cantidad).toFixed(2)}</TableCell>
                       <TableCell align="center">
-                        <IconButton color="primary" onClick={() => incrementItem(productData.uId)}>
+                        <IconButton color="primary" onClick={() => incrementItem(productData.id)}>
                           <AddCircleIcon />
                         </IconButton>
-                        <IconButton color="primary" onClick={() => decrementItem(productData.uId)}>
+                        <IconButton color="primary" onClick={() => decrementItem(productData.id)}>
                           <RemoveCircleIcon />
                         </IconButton>
-                        <IconButton color="error" onClick={() => removeFromCart(productData.uId)}>
+                        <IconButton color="error" onClick={() => removeFromCart(productData.id)}>
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>

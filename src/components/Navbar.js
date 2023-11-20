@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import logo from "../media/logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useCartContext } from "../context/CartContextProvider";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -53,14 +54,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = ({ userIsAuthenticated = false, navBarColor, carrito }) => {
-  
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const { cart } = useCartContext();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
   let userData = localStorage.getItem('user') !== null ? localStorage.getItem('user') : undefined;
-  if (userData){ userData = JSON.parse(userData)}
+  if (userData) { userData = JSON.parse(userData) }
 
   useEffect(() => {
 
@@ -153,7 +154,7 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor, carrito }) => {
               color="inherit"
               onClick={() => navigate("/carrito")}
             >
-              <Badge badgeContent={carrito.length} color="error">
+              <Badge badgeContent={cart.length} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import Carrito from '../components/Carrito';
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import {
@@ -19,6 +18,7 @@ import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import { useNavigate } from "react-router-dom";
 import { obtenerProductosPorEmpresa } from "../apis/productApis";
+import { useCartContext } from "../context/CartContextProvider";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -31,8 +31,9 @@ const StyledContainer = styled(`div`)({
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const ProductDetails = ({setCarrito}) => {
+const ProductDetails = () => {
   const theme = useTheme();
+  const { addToCart } = useCartContext();
   const companyID = window.location.pathname.split("/")[1];
   const productID = window.location.pathname.split("/")[3];
   const [activeStep, setActiveStep] = React.useState(0);
@@ -48,6 +49,7 @@ const ProductDetails = ({setCarrito}) => {
           const product = data.find((item) => item.uId === productID);
           if (product) {
             setProductData({
+              uId: productID,
               title: product.titulo,
               description: product.description,
               brand: product.marca,
@@ -87,8 +89,9 @@ const ProductDetails = ({setCarrito}) => {
     setSeAgregoAlCarrito(true);
     setSnackbarOpen(true);
     console.log("enviar datos", productData);
-  
+
     const nuevoProducto = {
+      id: productData.uId,
       title: productData.title,
       description: productData.description,
       brand: productData.brand,
@@ -98,9 +101,9 @@ const ProductDetails = ({setCarrito}) => {
       price: productData.price,
       images: productData.images,
       stock: productData.stock,
-     
-    };  
-    setCarrito((prevCarrito) => [...prevCarrito, nuevoProducto]);
+
+    };
+    addToCart(nuevoProducto);
     //console.log("carrito boton:", carrito)
     //navigate('/carrito', { state: { carrito: [...carrito, nuevoProducto] } });
   };
