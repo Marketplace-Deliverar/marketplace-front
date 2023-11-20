@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -25,16 +25,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
-const Carrito = () => {
-  const [carrito, setCarrito] = useState([
-    { id: 1, nombre: 'Camiseta', precio: 20, cantidad: 1, imagen: 'url_de_tu_imagen_camiseta.jpg' },
-    { id: 2, nombre: 'Zapatos', precio: 50, cantidad: 1, imagen: 'url_de_tu_imagen_zapatos.jpg' },
-    // Otros productos en el carrito
-  ]);
+const Carrito = ({carrito=[], setCarrito}) => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [loteValue, setLoteValue] = useState('');
-
   const [openPopup, setOpenPopup] = useState(false);
+  const [loteValue, setLoteValue] = useState('');
+  console.log("llego al carrito", carrito);
 
   const removeFromCart = (productId) => {
     const updatedCarrito = carrito.filter((producto) => producto.id !== productId);
@@ -56,8 +52,10 @@ const Carrito = () => {
   };
 
   const calcularTotal = () => {
-    return carrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
-  };
+    return carrito.reduce((total, producto) => total + producto.price * producto.cantidad, 0);
+  }; 
+  
+
 
   const handleClickOpenPopup = () => {
     setOpenPopup(true);
@@ -69,12 +67,9 @@ const Carrito = () => {
   };
 
   const handleInputChange = (event) => {
-    // Aquí puedes manejar la lógica de validación o realizar acciones adicionales
     const inputValue = event.target.value;
     setLoteValue(inputValue);
   };
-
-
 
   return (
     <div style={{ margin: '0 40px', marginBottom: '40px' }}>
@@ -93,25 +88,27 @@ const Carrito = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {carrito.map((producto) => (
-                    <TableRow key={producto.id}>
+                  {carrito?.map((productData) => (
+                    <TableRow key={productData?.uId}>
                       <TableCell>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={producto.nombre} src={producto.imagen} />
-                          <Typography style={{ marginLeft: 10 }}>{producto.nombre}</Typography>
+                          {productData?.images && productData.images[0] && (
+                            <Avatar src={productData.images[0]} />
+                          )}
+                          <Typography style={{ marginLeft: 10 }}>{productData?.title ?? 'Nombre no disponible'}</Typography>
                         </div>
                       </TableCell>
-                      <TableCell align="center">{producto.cantidad}</TableCell>
-                      <TableCell align="center">${producto.precio.toFixed(2)}</TableCell>
-                      <TableCell align="center">${(producto.precio * producto.cantidad).toFixed(2)}</TableCell>
+                      <TableCell align="center">{productData.cantidad}</TableCell>
+                      <TableCell align="center">${productData.price.toFixed(2)}</TableCell>
+                      <TableCell align="center">${(productData.price * productData.cantidad).toFixed(2)}</TableCell>
                       <TableCell align="center">
-                        <IconButton color="primary" onClick={() => incrementItem(producto.id)}>
+                        <IconButton color="primary" onClick={() => incrementItem(productData.uId)}>
                           <AddCircleIcon />
                         </IconButton>
-                        <IconButton color="primary" onClick={() => decrementItem(producto.id)}>
+                        <IconButton color="primary" onClick={() => decrementItem(productData.uId)}>
                           <RemoveCircleIcon />
                         </IconButton>
-                        <IconButton color="error" onClick={() => removeFromCart(producto.id)}>
+                        <IconButton color="error" onClick={() => removeFromCart(productData.uId)}>
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>
@@ -123,7 +120,7 @@ const Carrito = () => {
           </div>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Box style={{ backgroundColor: '#f5f5f5', padding: '20px' }}>
+          <Box style={{ backgroundColor: '#f5f5f5', padding: '20px', borderRadius: '8px' }}>
             <Typography variant="h6" gutterBottom style={{ color: '#1976d2', textTransform: 'capitalize', fontWeight: 'bold', marginBottom: '30px' }}>
               Resumen de Compra
             </Typography>
@@ -138,7 +135,7 @@ const Carrito = () => {
             <TextField
               required
               label="Ingrese Lote"
-              name='Ingrese lote'
+              name="Ingrese lote"
               type="number"
               InputProps={{
                 inputProps: {
@@ -147,8 +144,8 @@ const Carrito = () => {
                 },
               }}
               onChange={handleInputChange}
-              style={{ marginBottom: '40px', marginTop: '5px', width: '200px', }} 
               fullWidth
+              style={{ marginBottom: '20px' }}
             />
             <div>
               <Button

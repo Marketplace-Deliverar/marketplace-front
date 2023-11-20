@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,6 +14,8 @@ import { styled } from '@mui/material/styles';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
+
+
 const tableContainerStyles = {
   width: '60%',
   margin: '0 auto',
@@ -24,7 +26,6 @@ const tableContainerStyles = {
 
 const ColoredTableCell = styled(TableCell)(({ theme }) => ({
   color: theme.palette.primary.main,
-  padding: '12px', // Ajusta este valor según sea necesario
 }));
 
 export default function ListaMisPedidos({ userId }) {
@@ -60,10 +61,12 @@ export default function ListaMisPedidos({ userId }) {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
+  
   const handleCarritoClick = () => {
+    // Usa navigate en lugar de history.push
     navigate('/');
   };
+
 
   return (
     <div style={tableContainerStyles}>
@@ -81,21 +84,22 @@ export default function ListaMisPedidos({ userId }) {
           <TableBody>
             {listaPedidos.map((row) => (
               <TableRow key={row.uId}>
-                <ColoredTableCell align="center" component="th" scope="row">
+                <TableCell align="center" component="th" scope="row">
                   {row.uId}
-                </ColoredTableCell>
-                <ColoredTableCell align="center">{row.pagado ? 'Pago' : 'Sin pagar'}</ColoredTableCell>
-                <ColoredTableCell align="center">{row.total}</ColoredTableCell>
-                <ColoredTableCell align="center">
+                </TableCell>
+                <TableCell align="center">{row.pagado ? 'Pago' : 'Sin pagar'}</TableCell>
+                <TableCell align="center">{row.total}</TableCell>
+                <TableCell align="center">
                   <IconButton color="primary" onClick={() => descargarArchivo(row.nombreArchivo)}>
                     <GetAppIcon />
                   </IconButton>
-                </ColoredTableCell>
-                <ColoredTableCell align="center">
-                  <IconButton color="primary" onClick={handleCarritoClick}>
+                    
+                </TableCell>
+                <TableCell align="center">
+                <IconButton color="primary" onClick={handleCarritoClick}>
                     <LocalShippingIcon />
                   </IconButton>
-                </ColoredTableCell>
+                  </TableCell>
               </TableRow>
             ))}
           </TableBody>

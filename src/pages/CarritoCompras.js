@@ -1,12 +1,12 @@
 import Tittle from "../components/Tittle";
 import Carrito from "../components/Carrito";
 
-const CarritoCompras = (props) => {
+const CarritoCompras = ({carrito, setCarrito}) => {
 
   return (
     <div>
       <Tittle text='Mi Carrito' color="#1976d2" align="center" padding="60px"></Tittle>
-      <Carrito></Carrito>
+      <Carrito carrito={carrito} setCarrito={setCarrito} ></Carrito >
     </div>
   );
 };

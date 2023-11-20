@@ -60,10 +60,11 @@ const App = () => {
     mail: "antonella@gmail.com",
     dni: "123456",
   }
-  localStorage.setItem('user', JSON.stringify(userData)) 
+  localStorage.setItem('user', JSON.stringify(userData));
+  const [carrito, setCarrito] = React.useState([]);
 
    //if (domain.startsWith("marketplace.deliver.ar")) {
-   
+  console.log("carrito app:", carrito)
   if (domain.startsWith("localhost")) {
     content = (
       <Routes>
@@ -74,10 +75,10 @@ const App = () => {
         <Route path="/empresas" element={<Empresas />} />
         <Route path="/empresa" element={<CompanyData />} />
         <Route path="/BusinessProducts" element={<BusinessProducts />} />
-        <Route path="/:cid/product/:pid" element={<ProductDetail />} />
+        <Route path="/:cid/product/:pid" element={<ProductDetail setCarrito={setCarrito} />} />
         <Route path="/usuarios/:uId" element={<MisDatosCliente />} />
         <Route path="/pedidos/usuario/:uId" element={<MisPedidosCliente />} />
-        <Route path="/carrito" element={<CarritoCompras />} />
+        <Route path="/carrito" element={<CarritoCompras carrito={carrito} setCarrito={setCarrito}/>} />
         <Route path="*" element={<Inicio />} />
       </Routes>
     );
@@ -92,10 +93,10 @@ const App = () => {
         <Route path="/empresas" element={<Empresas />} />
         <Route path="/empresa" element={<CompanyData />} />
         <Route path="/BusinessProducts" element={<BusinessProducts />} />
-        <Route path="/:cid/product/:pid" element={<ProductDetail />} />
+        <Route path="/:cid/product/:pid" element={<ProductDetail setCarrito={setCarrito} />} />
         <Route path="/usuarios/:uId" element={<MisDatosCliente />} />
         <Route path="/pedidos/usuario/:uId" element={<MisPedidosCliente />} />
-        <Route path="/carrito" element={<CarritoCompras />} />
+        <Route path="/carrito" element={<CarritoCompras carrito={carrito} setCarrito={setCarrito}/>} />
         <Route path="*" element={<><Inicio /></>} />
       </Routes>
     );
