@@ -1,126 +1,92 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+// Styles & icons
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import logo from "../media/logo.svg";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
+// Custom components
+
+// External component library
 import {
   AppBar,
   Container,
+  Menu,
+  MenuItem,
   Toolbar,
-  InputBase,
   IconButton,
   styled,
 } from "@mui/material";
-import Menu from "@mui/material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MenuItem from "@mui/material/MenuItem";
-import logo from "../media/logo.svg";
-import { Link, useNavigate } from "react-router-dom";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
-  color: "#fff",
+  color: theme.palette.primary.contrastText,
   paddingTop: theme.spacing(0),
 }));
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-}));
-
-const StyledSearch = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  backgroundColor: "#fff",
-  borderRadius: theme.shape.borderRadius,
-  maxWidth: "170px", // Ancho máximo (mínimo en dispositivos móviles)
-  [theme.breakpoints.up("sm")]: {
-    "&:focus": {
-      width: "100%",
-    },
-  },
-}));
-
-const StyledSearchIcon = styled(IconButton)(({ theme }) => ({
-  padding: theme.spacing(0.5),
-  pointerEvents: "none",
-  color: "#1976d2",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  padding: theme.spacing(0.5, 0.5, 0.5, 0.5), // Reducir el espacio al ajustar el padding
-  paddingLeft: `calc(1em + ${theme.spacing(0)})`, // Ajustar el espacio izquierdo
-  transition: theme.transitions.create("width"),
-  width: "100%",
-}));
-
-const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
+const Navbar = ({ userIsAuthenticated = false }) => {
   const navigate = useNavigate();
-
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(userIsAuthenticated); // TODO: VOlver a false
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
 
+  const isEmpresa = false; // TODO: Traerlo el auth provider
+
   useEffect(() => {
-    const auth = localStorage.getItem('clerk-db-jwt');
-    const userType = localStorage.getItem('userType') !== null ? localStorage.getItem('userType') : "individuo";
-    if (auth) {
-      switch (userType) {
-        case "empresa":
-          setMenuOptions([
-            {
-              label: "Mis datos",
-              onClick: () => navigate("/"),
-            },
-            {
-              label: "Mis productos",
-              onClick: () => navigate("/"),
-            },
-            {
-              label: "Pedidos",
-              onClick: () => navigate("/"),
-            },
-            {
-              label: "Cerrar sesión",
-              onClick: () => {
-                localStorage.clear(); setIsAuthenticated(false); window.location.reload();
-              },
-            },
-          ]);
-          break;
-
-        case "individuo":
-          setMenuOptions([
-            {
-              label: "Mi perfil",
-              onClick: () => navigate("/usuarios/user_2XLq6Lb94pRk43JtdRmRI0e0PkU"),
-            },
-            {
-              label: "Mis pedidos",
-              onClick: () => navigate("/pedidos/usuario/8337531602"),
-            },
-            {
-              label: "Cerrar sesión",
-              onClick: () => {
-                localStorage.clear(); setIsAuthenticated(false); window.location.reload();
-              },
-            },
-          ]);
-          break;
-
-        default:
-          setMenuOptions([
-            {
-              label: "Iniciar sesion / registrarse",
-              onClick: () => navigate("/login"),
-            },
-          ]);
-          break;
-      }
-    } else {
+    if (!isAuthenticated) {
       setMenuOptions([
         {
           label: "Iniciar sesion / registrarse",
           onClick: () => navigate("/login"),
         },
       ]);
+    } else {
+      // TODO: Traerlo el auth provider
+      if (/*user.type*/ isEmpresa) {
+        setMenuOptions([
+          {
+            label: "Mis datos",
+            onClick: () => navigate("/empresa"),
+          },
+          {
+            label: "Mis productos",
+            onClick: () => navigate("/businessProducts"),
+          },
+          {
+            label: "Pedidos",
+            onClick: () => navigate("/"), // TODO: No tenemos esto en empresa,  o si?
+          },
+          {
+            label: "Cerrar sesión",
+            onClick: () => {
+              localStorage.clear();
+              setIsAuthenticated(false);
+              window.location.reload();
+            },
+          },
+        ]);
+      } else {
+        //"Individuo"
+        setMenuOptions([
+          {
+            label: "Mi perfil",
+            onClick: () => navigate("/perfil"),
+          },
+          {
+            label: "Mis pedidos",
+            onClick: () => navigate("/pedidos"),
+          },
+          {
+            label: "Cerrar sesión",
+            onClick: () => {
+              localStorage.clear();
+              setIsAuthenticated(false);
+              window.location.reload();
+            },
+          },
+        ]);
+      }
     }
   }, [isAuthenticated]);
 
@@ -133,23 +99,25 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
   };
 
   return (
-    <StyledAppBar className="navbar" position="static" sx={{ mb: 0 }} style={{ backgroundColor: navBarColor }}>
+    <StyledAppBar className="navbar" position="static" sx={{ mb: 0 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>
-          {isAuthenticated && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión
-            <IconButton
-              size="large"
-              aria-label="Carrito de compras"
-              color="inherit"
-              onClick={() => navigate("/carrito")}
-            >
-              <ShoppingCartIcon />
-            </IconButton>
-          )}
+          {isAuthenticated &&
+            !isEmpresa && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión
+              // Agregar validacion para que no se muestre si una empresa esta loggeada
+              <IconButton
+                size="large"
+                aria-label="Carrito de compras"
+                color="inherit"
+                onClick={() => navigate("/carrito")}
+              >
+                <ShoppingCartIcon />
+              </IconButton>
+            )}
           <IconButton
             size="large"
             aria-label="account of current user"

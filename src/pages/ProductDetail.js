@@ -47,7 +47,7 @@ const ProductDetails = (props) => {
         .then((data) => {
           if (data) {
             let product = data.find((item) => item.uId === productID);
-            console.log(product)
+            console.log(product);
             product = {
               title: product.titulo,
               description: product.description,
@@ -79,6 +79,10 @@ const ProductDetails = (props) => {
   // Extra functionallity
 
   // Handlers
+  const handleBuyButtonClick = () => {
+    //TODO: Pending add to cart funct
+  };
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -130,7 +134,12 @@ const ProductDetails = (props) => {
             <Typography variant="h6" align="end" pr={2}>
               ${productData.price}
             </Typography>
-            <Button variant="contained" mb={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              mb={2}
+              onClick={handleBuyButtonClick}
+            >
               Comprar
             </Button>
           </Grid>
@@ -173,6 +182,7 @@ const ProductDetails = (props) => {
                   size="small"
                   onClick={handleNext}
                   disabled={activeStep === productData.images?.length - 1}
+                  color="primary"
                 >
                   Next
                   {theme.direction === "rtl" ? (
@@ -187,6 +197,7 @@ const ProductDetails = (props) => {
                   size="small"
                   onClick={handleBack}
                   disabled={activeStep === 0}
+                  color="primary"
                 >
                   {theme.direction === "rtl" ? (
                     <KeyboardArrowRight />
