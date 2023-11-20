@@ -6,7 +6,7 @@ import {
   InputBase,
   IconButton,
   styled,
-  Typography
+  Typography, Badge
 } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -52,7 +52,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
 }));
 
-const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
+const Navbar = ({ userIsAuthenticated = false, navBarColor, carrito }) => {
   
   const navigate = useNavigate();
 
@@ -153,7 +153,9 @@ const Navbar = ({ userIsAuthenticated = false, navBarColor }) => {
               color="inherit"
               onClick={() => navigate("/carrito")}
             >
-              <ShoppingCartIcon />
+              <Badge badgeContent={carrito.length} color="error">
+                <ShoppingCartIcon />
+              </Badge>
             </IconButton>
           )}
           <IconButton
