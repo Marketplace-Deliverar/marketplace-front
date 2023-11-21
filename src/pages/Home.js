@@ -39,7 +39,7 @@ const Home = (props) => {
   };
 
   // TODO: If not auth, redirect to login
-  return isCompany ? <HomeBusiness /> : renderUserHome();
+  return !isCompany ? <HomeBusiness /> : renderUserHome();
 };
 
 export default Home;

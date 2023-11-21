@@ -17,7 +17,9 @@ import {
   Toolbar,
   IconButton,
   styled,
+  Typography, Badge
 } from "@mui/material";
+import { useCartContext } from "../context/CartContextProvider";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -26,10 +28,13 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 }));
 
 const Navbar = ({ userIsAuthenticated = false }) => {
+  const { cart } = useCartContext();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(userIsAuthenticated); // TODO: VOlver a false
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
+  let userData = localStorage.getItem('user') !== null ? localStorage.getItem('user') : undefined;
+  if (userData) { userData = JSON.parse(userData) }
 
   const isEmpresa = false; // TODO: Traerlo el auth provider
 
@@ -106,7 +111,11 @@ const Navbar = ({ userIsAuthenticated = false }) => {
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>
-          {isAuthenticated &&
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            ¡Bienvenida {userData?.name}!
+          </Typography>
+          {
+            isAuthenticated &&
             !isEmpresa && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión
               // Agregar validacion para que no se muestre si una empresa esta loggeada
               <IconButton
@@ -115,9 +124,12 @@ const Navbar = ({ userIsAuthenticated = false }) => {
                 color="inherit"
                 onClick={() => navigate("/carrito")}
               >
-                <ShoppingCartIcon />
+                <Badge badgeContent={cart.length} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
               </IconButton>
-            )}
+            )
+          }
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -128,6 +140,7 @@ const Navbar = ({ userIsAuthenticated = false }) => {
           >
             <AccountCircle />
           </IconButton>
+
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
@@ -155,9 +168,9 @@ const Navbar = ({ userIsAuthenticated = false }) => {
               </MenuItem>
             ))}
           </Menu>
-        </Toolbar>
-      </Container>
-    </StyledAppBar>
+        </Toolbar >
+      </Container >
+    </StyledAppBar >
   );
 };
 

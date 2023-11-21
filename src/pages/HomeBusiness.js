@@ -1,4 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 // Styles, images & icons
 import { useThemeContext } from "../context/ThemeContextProvider";
@@ -20,6 +25,7 @@ export default function HomeBusiness(props) {
   const { changeTheme } = useThemeContext();
   const [empresa, setEmpresa] = useState(null);
   const [imagen, setImagen] = useState("");
+  const [openModal, setOpenModal] = useState(false);
 
   const obtenerDatosEmpresa = async (dominio) => {
     try {
@@ -49,6 +55,14 @@ export default function HomeBusiness(props) {
   };
 
   useEffect(() => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const successParam = urlSearchParams.get('success');
+    const isSuccess = successParam === 'true';
+
+    if (isSuccess) {
+      setOpenModal(true);
+    }
+
     // TODO: Esto viene del back o del login de usuarios?
     // Realizar la solicitud para obtener los datos de la empresa
     obtenerDatosEmpresa(empresaURL)
@@ -96,6 +110,9 @@ export default function HomeBusiness(props) {
         />
       </div>
     );
+  }
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -105,6 +122,34 @@ export default function HomeBusiness(props) {
         <LeftSidebarFilter />
         <ProductCards empresa={empresa} />
       </Stack>
+
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'white',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: '8px',
+          }}
+        >
+          <CheckCircleOutlineIcon color="success" sx={{ fontSize: 50, mb: 2 }} />
+          <Typography variant="h5" mb={2}>
+            ¡Gracias por elegirnos!
+          </Typography>
+          <Typography variant="body1">
+            La factura estará disponible pronto en la sección 'Mis Pedidos'.
+          </Typography>
+          <Button onClick={handleCloseModal} variant="contained" color="success" sx={{ mt: 3 }}>
+            Cerrar
+          </Button>
+        </Box>
+      </Modal>
     </>
   );
 }
