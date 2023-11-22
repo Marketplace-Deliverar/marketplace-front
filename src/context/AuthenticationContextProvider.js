@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { getLoggedInInformation, logoutFromSession } from "../apis/authApis";
 
 const AuthenticationContext = createContext();
 
@@ -8,28 +9,43 @@ export function useAuth() {
 }
 
 const AuthenticationContextProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Aca almacenamos la información del usuario loggeado, inicialmente null
-  const [user, setUser] = useState(null); // Aca almacenamos la información del usuario loggeado, inicialmente null
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Función para manejar el inicio de sesión
-  const login = async (credentials) => {
+  const login = async () => {
+    setLoading(true);
+
     try {
-      // Aca tenemos que hacer la autenticación mediante una API de usuarios o obtener los datos del usuario nosotros
-      // const user = await authService.login(credentials);
-      // setUser(user);
-      setIsAuthenticated(true);
+      const data = await getLoggedInInformation();
+      if (Object.keys(data).length === 0) {
+        setUser(null);
+        setIsAuthenticated(false);
+      } else {
+        setUser(data);
+        setIsAuthenticated(true);
+      }
     } catch (error) {
       setIsAuthenticated(false);
       console.error(error);
     }
+    setLoading(false);
   };
 
-  // Función para cerrar sesión
-  const logout = () => {
-    // Operaciones necesarias para cerrar sesión, como limpiar el estado
+  const logout = async () => {
+    try {
+      await logoutFromSession();
+    } catch (error) {
+      console.error(error);
+    }
     setUser(null);
     setIsAuthenticated(false);
+    window.location.href = "/";
   };
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) login();
+  }, []);
 
   return (
     <AuthenticationContext.Provider

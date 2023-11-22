@@ -6,7 +6,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import logo from "../media/logo.svg";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
-// Custom components
+// Custom components & context
+import { useCartContext } from "../context/CartContextProvider";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 // External component library
 import {
@@ -17,9 +19,9 @@ import {
   Toolbar,
   IconButton,
   styled,
-  Typography, Badge
+  Typography,
+  Badge,
 } from "@mui/material";
-import { useCartContext } from "../context/CartContextProvider";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -27,28 +29,23 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   paddingTop: theme.spacing(0),
 }));
 
-const Navbar = ({ userIsAuthenticated = true }) => {
+const Navbar = () => {
   const { cart } = useCartContext();
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(userIsAuthenticated); // TODO: VOlver a false
+  const { isAuthenticated, user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
-  let userData = localStorage.getItem('user') !== null ? localStorage.getItem('user') : undefined;
-  if (userData) { userData = JSON.parse(userData) }
-
-  const isEmpresa = false; // TODO: Traerlo el auth provider
 
   useEffect(() => {
     if (!isAuthenticated) {
       setMenuOptions([
         {
           label: "Iniciar sesion / Registrarse",
-          onClick: () => navigate("/login"),
+          onClick: () => navigate("/login"), //TODO: cambiar por ruta de login de modulo usuarios
         },
       ]);
     } else {
-      // TODO: Traerlo el auth provider
-      if (/*user.type*/ isEmpresa) {
+      if (user.isProvider) {
         setMenuOptions([
           {
             label: "Mis datos",
@@ -59,14 +56,10 @@ const Navbar = ({ userIsAuthenticated = true }) => {
             onClick: () => navigate("/businessProducts"),
           },
           {
-            label: "Pedidos",
-            onClick: () => navigate("/"), // TODO: No tenemos esto en empresa,  o si?
-          },
-          {
             label: "Cerrar sesión",
             onClick: () => {
               localStorage.clear();
-              setIsAuthenticated(false);
+              logout();
               window.location.reload();
             },
           },
@@ -80,13 +73,13 @@ const Navbar = ({ userIsAuthenticated = true }) => {
           },
           {
             label: "Mis pedidos",
-            onClick: () => navigate("/purchase/estado/112233"), //harcodeado: acomodar
+            onClick: () => navigate("/purchase/estado/" + user.dni),
           },
           {
             label: "Cerrar sesión",
             onClick: () => {
               localStorage.clear();
-              setIsAuthenticated(false);
+              logout();
               window.location.reload();
             },
           },
@@ -111,13 +104,11 @@ const Navbar = ({ userIsAuthenticated = true }) => {
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            ¡Bienvenida {userData?.name}!
-          </Typography>
-          {
-            isAuthenticated &&
-            !isEmpresa && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión
-              // Agregar validacion para que no se muestre si una empresa esta loggeada
+          {isAuthenticated &&
+            !user.isProvider && (<>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                ¡Bienvenida {user?.name}!
+              </Typography>
               <IconButton
                 size="large"
                 aria-label="Carrito de compras"
@@ -128,8 +119,8 @@ const Navbar = ({ userIsAuthenticated = true }) => {
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
-            )
-          }
+            </>
+            )}
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -168,9 +159,9 @@ const Navbar = ({ userIsAuthenticated = true }) => {
               </MenuItem>
             ))}
           </Menu>
-        </Toolbar >
-      </Container >
-    </StyledAppBar >
+        </Toolbar>
+      </Container>
+    </StyledAppBar>
   );
 };
 

@@ -26,6 +26,7 @@ import {
 } from "@mui/material";
 import { useCartContext } from "../context/CartContextProvider";
 import { enviarCarrito } from "../controllers/carritoController";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -55,7 +56,9 @@ const CarritoCompras = (props) => {
   const navigate = useNavigate();
   const [openPopup, setOpenPopup] = useState(false);
   const [loteValue, setLoteValue] = useState('');
+  const {isAuthenticated, user} = useAuth();
 
+  //windows.location
   const incrementItem = (productId) => {
     const updatedCarrito = cart.map((producto) =>
       producto.id === productId ? { ...producto, cantidad: producto.cantidad + 1 } : producto
@@ -87,12 +90,12 @@ const CarritoCompras = (props) => {
         product_name: cart[0].title,
         product_price: cart[0].price,
         product_amount: cart[0].cantidad,
-        product_marketplace: "", //ver
-        product_marketplace_cuit: 0, //ver
-        delivery_lot: loteValue, //ver
-        user_name: "string", //ver
-        user_email: "string", //ver
-        user_document: "string", //ver
+        product_marketplace: user.businessName, //ver
+        product_marketplace_cuit: user.cuit, //ver
+        delivery_lot: loteValue, 
+        user_name: user.name, 
+        user_email: user.email, 
+        user_document: user.dni,
       };
 
       console.log("Datos del carrito a enviar", carrito);
