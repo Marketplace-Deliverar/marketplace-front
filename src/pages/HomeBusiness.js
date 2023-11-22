@@ -30,8 +30,6 @@ export default function HomeBusiness(props) {
 
     if (isSuccess) {
       setOpenModal(true);
-    } else {
-      if (!isAuthenticated) navigate("/");
     }
 
     changeTheme(user.primaryColor, user.secondaryColor);
