@@ -13,14 +13,17 @@ import {
   crearProducto,
 } from "../controllers/productoController";
 import { obtenerRubros } from "../controllers/marcasController";
+import { getbrandByURL } from "../apis/brandApis";
 
-// Custom componets
+// Custom componets & context
 import MyProducts from "../components/MyProducts";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 // External Components
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -35,6 +38,8 @@ import {
 
 const BusinessProducts = () => {
   const theme = useTheme();
+  const { isAuthenticated, user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [listaProductos, setListaProductos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRubros, setSelectRubros] = useState("");
@@ -43,22 +48,22 @@ const BusinessProducts = () => {
   const [selectedCategorias, setSelectCategorias] = useState("");
   const [stock, setStock] = useState("");
   const [marca, setMarca] = useState("");
-  const [titulo, setTitulo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [precio, setPrecio] = useState("");
-  const [stockNumber, setStockNumber] = useState("");
   const [file, setFile] = useState("");
   const [fileUrl, setFileUrl] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
+      setLoading(true);
+      // Productos
       try {
-        // Productos
-        const Productos = await obtenerProductosEmpresa(1849171299); // TODO: Empresa harcodeada, traer del auth provider
-        setListaProductos(Productos);
+        let response = await getbrandByURL(user.domain);
+        if (response) {
+          const productos = await obtenerProductosEmpresa(response.uId);
+          if (productos) setListaProductos(productos);
+        }
       } catch (error) {
-        console.error("Error al obtener productos:", error);
+        console.error("Error al obtener empresa y/o productos:", error);
       }
 
       // Rubros
@@ -68,8 +73,10 @@ const BusinessProducts = () => {
       } catch (error) {
         console.error("Error al obtener rubros:", error);
       }
-    }
+      setLoading(false);
+    };
 
+    if (!isAuthenticated) navigate("/");
     fetchData();
   }, []);
 
@@ -94,6 +101,7 @@ const BusinessProducts = () => {
     console.log(event.target.files[0]);
   };
 
+  // TODO: Lo iban a cambiar o queda asi?
   function uploadFile(file) {
     const url = `https://api.cloudinary.com/v1_1/daykon/upload`;
     const fd = new FormData();
@@ -206,18 +214,23 @@ const BusinessProducts = () => {
         >
           Mis Productos
         </Typography>
-        <IconButton
-          aria-label="delete"
-          onClick={() => {
-            setIsModalOpen(true);
-          }}
-        >
-          <AddIcon />
-        </IconButton>
-
-        <Box sx={{ margin: 2, borderRadius: 2 }}>
-          <MyProducts rows={listaProductos}></MyProducts>
-        </Box>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              <AddIcon />
+            </IconButton>
+            <Box sx={{ margin: 2, borderRadius: 2 }}>
+              <MyProducts rows={listaProductos}></MyProducts>
+            </Box>
+          </>
+        )}
       </Grid>
     );
   };
@@ -236,7 +249,6 @@ const BusinessProducts = () => {
             boxShadow: 24,
             p: 6,
             height: "80%",
-            width: "30%",
             overflow: "scroll",
           }}
           component="form"

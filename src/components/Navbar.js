@@ -6,7 +6,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import logo from "../media/logo.svg";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
-// Custom components
+// Custom components & context
+import { useCartContext } from "../context/CartContextProvider";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 // External component library
 import {
@@ -17,9 +19,9 @@ import {
   Toolbar,
   IconButton,
   styled,
-  Typography, Badge
+  Typography,
+  Badge,
 } from "@mui/material";
-import { useCartContext } from "../context/CartContextProvider";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -27,28 +29,25 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   paddingTop: theme.spacing(0),
 }));
 
-const Navbar = ({ userIsAuthenticated = false }) => {
-  const { cart } = useCartContext();
+const Navbar = (props) => {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(userIsAuthenticated); // TODO: VOlver a false
+  const { isAuthenticated, user, logout } = useAuth();
+  const { cart } = useCartContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
-  let userData = localStorage.getItem('user') !== null ? localStorage.getItem('user') : undefined;
-  if (userData) { userData = JSON.parse(userData) }
-
-  const isEmpresa = false; // TODO: Traerlo el auth provider
 
   useEffect(() => {
     if (!isAuthenticated) {
       setMenuOptions([
         {
           label: "Iniciar sesion / registrarse",
-          onClick: () => navigate("/login"),
+          onClick: () => {
+            window.location.href = "/"; // TODO: Agregar ruta al login del modulo de usuarios
+          },
         },
       ]);
     } else {
-      // TODO: Traerlo el auth provider
-      if (/*user.type*/ isEmpresa) {
+      if (user.isProvider) {
         setMenuOptions([
           {
             label: "Mis datos",
@@ -59,14 +58,10 @@ const Navbar = ({ userIsAuthenticated = false }) => {
             onClick: () => navigate("/businessProducts"),
           },
           {
-            label: "Pedidos",
-            onClick: () => navigate("/"), // TODO: No tenemos esto en empresa,  o si?
-          },
-          {
             label: "Cerrar sesión",
             onClick: () => {
               localStorage.clear();
-              setIsAuthenticated(false);
+              logout();
               window.location.reload();
             },
           },
@@ -86,7 +81,7 @@ const Navbar = ({ userIsAuthenticated = false }) => {
             label: "Cerrar sesión",
             onClick: () => {
               localStorage.clear();
-              setIsAuthenticated(false);
+              logout();
               window.location.reload();
             },
           },
@@ -112,12 +107,10 @@ const Navbar = ({ userIsAuthenticated = false }) => {
           </Link>
           <div style={{ flexGrow: 1 }}></div>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            ¡Bienvenida {userData?.name}!
+            ¡Bienvenida {user?.name}!
           </Typography>
-          {
-            isAuthenticated &&
-            !isEmpresa && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión
-              // Agregar validacion para que no se muestre si una empresa esta loggeada
+          {isAuthenticated &&
+            !user.isProvider && ( // Mostrar el carrito solo cuando el usuario ha iniciado sesión, no si es empresa
               <IconButton
                 size="large"
                 aria-label="Carrito de compras"
@@ -128,8 +121,7 @@ const Navbar = ({ userIsAuthenticated = false }) => {
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
-            )
-          }
+            )}
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -168,9 +160,9 @@ const Navbar = ({ userIsAuthenticated = false }) => {
               </MenuItem>
             ))}
           </Menu>
-        </Toolbar >
-      </Container >
-    </StyledAppBar >
+        </Toolbar>
+      </Container>
+    </StyledAppBar>
   );
 };
 

@@ -4,19 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 // Styles
 import { styled } from "@mui/material/styles";
 
-// Custom Components
+// Custom Components and context
 import Hero from "../components/Hero";
 import GrillaEmpresas from "../components/GrillaEmpresas";
 import HomeBusiness from "./HomeBusiness";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 // External Components
 import { Button, Typography } from "@mui/material";
 
 const Home = (props) => {
   const navigate = useNavigate();
-  const domain = window.location.hostname;
-  // TODO: Validar empresa o usuario con provider de autenticacion
-  const isCompany = domain.startsWith("marketplace.deliver.ar");
+  const { isAuthenticated, user } = useAuth();
 
   const renderUserHome = () => {
     return (
@@ -38,8 +37,15 @@ const Home = (props) => {
     );
   };
 
-  // TODO: If not auth, redirect to login
-  return !isCompany ? <HomeBusiness /> : renderUserHome();
+  return isAuthenticated ? (
+    user.isProvider ? (
+      <HomeBusiness />
+    ) : (
+      renderUserHome()
+    )
+  ) : (
+    renderUserHome()
+  );
 };
 
 export default Home;

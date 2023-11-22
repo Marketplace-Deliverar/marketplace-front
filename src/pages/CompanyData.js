@@ -1,108 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Styles & icons
+// Styles, icons & context
+import styled from "@emotion/styled";
 import { useTheme } from "@emotion/react";
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
-
-// Apis
-import {
-  obtenerEmpresa,
-  actualizarEmpresa,
-} from "../controllers/empresasController";
-import { obtenerRubros } from "../controllers/marcasController";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 // External Components
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  Input,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[200],
+  padding: 2,
+  margin: 2,
+  borderRadius: 4,
+}));
 
 const CompanyData = () => {
   const theme = useTheme();
-  const [age, setAge] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [datosEmpresa, setDatosEmpresa] = useState();
-  const [listaRubros, setListaRubros] = useState([]);
-  const [selectedRubros, setSelectRubros] = useState("");
-  const [razonSocial, setRazonSocial] = useState("");
-  const [cuit, setCuit] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefonoCelular, setTelefonoCelular] = useState("");
-  const [direccion, setDireccion] = useState("");
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchData() {
-      // empresa
-      try {
-        const empresa = await obtenerEmpresa(1849171299); // TODO: Desharcodear esto, ver que venga del id loggeado del auth provider
-        setDatosEmpresa(empresa);
-        setSelectRubros(empresa.rubro);
-        setRazonSocial(empresa.razon_social);
-        setCuit(empresa.cuit);
-        setEmail(empresa.email);
-        setTelefonoCelular(empresa.celular);
-        setDireccion(empresa.direccion);
-      } catch (error) {
-        console.error("Error al obtener empresas:", error);
-      }
-
-      // rubro
-      try {
-        const rubros = await obtenerRubros();
-        setListaRubros(rubros);
-      } catch (error) {
-        console.error("Error al obtener rubros:", error);
-      }
-    }
-    fetchData();
+    if (!isAuthenticated) navigate("/");
   }, []);
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
-  const handleChangeRubro = (event) => {
-    setSelectRubros(event.target.value);
-  };
-
-  const handleSubmit = async () => {
-    const updatedData = {
-      razon_social: razonSocial,
-      cuit: cuit,
-      email: email,
-      celular: telefonoCelular,
-      direccion: direccion,
-      rubro: selectedRubros,
-      color_primario: "#FF5733",
-      color_secundario: "#3399FF",
-    };
-    console.log(updatedData);
-    console.log(JSON.stringify(updatedData));
-    try {
-      const rubros = await actualizarEmpresa(186, updatedData); //TODO: No actualiza la empresa, arreglar
-      setListaRubros(rubros);
-    } catch (error) {
-      console.error("Error al obtener rubros:", error);
-    }
-
-    handleCloseModal();
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   // Renders
   const renderTabsMenu = () => {
@@ -143,272 +64,62 @@ const CompanyData = () => {
   const renderCompanyData = () => {
     return (
       <Grid item xs={8} sx={{ marginY: 4 }}>
-        <Typography
-          component="h1"
-          variant="h5"
-          sx={{ marginBottom: 2, marginLeft: 2 }}
-        >
+        <Typography component="h1" variant="h5" mb={2} ml={2}>
           Datos de Empresa
         </Typography>
-        {datosEmpresa && (
-          <Box
-            sx={{
-              backgroundColor: "#f2f2f2",
-              padding: 2,
-              margin: 2,
-              borderRadius: 2,
-            }}
-          >
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+        {user && (
+          <StyledBox>
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               CUIT
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.cuit}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.cuit}
             </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               Razon Social
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.razon_social}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.businessName}
             </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               Rubro
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.rubro}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.category}
             </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               Email
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.email}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.email}
             </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               Direccion
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.direccion}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.address}
             </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               Teléfono Celular
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.celular}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.phone}
             </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               Color Primario
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.color_primario}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.primaryColor}
             </Typography>
-            <Typography
-              component="h1"
-              variant="h6"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
+            <Typography component="h1" variant="h6" mb={2} ml={2}>
               Color Primario
             </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ marginBottom: 2, marginLeft: 2 }}
-            >
-              {datosEmpresa.color_secundario}
+            <Typography variant="subtitle1" mb={2} ml={2}>
+              {user.secondaryColor}
             </Typography>
-
-            <Button
-              variant="contained"
-              onClick={() => {
-                setIsModalOpen(true);
-              }}
-            >
-              Editar Datos
-            </Button>
-          </Box>
+          </StyledBox>
         )}
       </Grid>
-    );
-  };
-
-  const renderEditCompanyDataModal = () => {
-    return (
-      <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 6,
-            height: "80%",
-            width: "30%",
-            overflow: "scroll",
-          }}
-        >
-          <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
-            Edite los datos de su empresa
-          </Typography>
-          {datosEmpresa && (
-            <form>
-              <TextField
-                fullWidth
-                id="outlined-basic-1"
-                label="Razón Social"
-                variant="outlined"
-                defaultValue={datosEmpresa.razon_social}
-              />
-              <TextField
-                fullWidth
-                id="outlined-basic-2"
-                label="CUIT"
-                variant="outlined"
-                sx={{ marginTop: 2 }}
-                defaultValue={datosEmpresa.cuit}
-              />
-              <TextField
-                fullWidth
-                id="outlined-basic-3"
-                label="Email"
-                variant="outlined"
-                sx={{ marginTop: 2 }}
-                defaultValue={datosEmpresa.email}
-              />
-              <TextField
-                fullWidth
-                id="outlined-basic-4"
-                label="Teléfono Celular"
-                variant="outlined"
-                sx={{ marginTop: 2 }}
-                defaultValue={datosEmpresa.celular}
-              />
-              <TextField
-                fullWidth
-                id="outlined-basic-5"
-                label="Dirección"
-                variant="outlined"
-                sx={{ marginTop: 2 }}
-                defaultValue={datosEmpresa.direccion}
-              />
-              <FormControl fullWidth sx={{ marginTop: 2 }}>
-                <InputLabel id="color-primary-label">Color Primario</InputLabel>
-                <Select
-                  labelId="color-primary-label"
-                  id="color-primary-select"
-                  value={age}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={10}>Color1</MenuItem>
-                  <MenuItem value={20}>Color2</MenuItem>
-                  <MenuItem value={30}>Color3</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth sx={{ marginTop: 2 }}>
-                <InputLabel id="color-secondary-label">
-                  Color Secundario
-                </InputLabel>
-                <Select
-                  labelId="color-secondary-label"
-                  id="color-secondary-select"
-                  value={age}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={10}>Color1</MenuItem>
-                  <MenuItem value={20}>Color2</MenuItem>
-                  <MenuItem value={30}>Color3</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth sx={{ marginTop: 2 }}>
-                <InputLabel id="rubro-label">Rubro</InputLabel>
-                <Select
-                  labelId="rubro-label"
-                  id="rubro-select"
-                  value={selectedRubros}
-                  onChange={handleChangeRubro}
-                >
-                  {listaRubros?.map((rubro, index) => (
-                    <MenuItem key={index} value={rubro}>
-                      {rubro}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <label htmlFor="icon-button-file">
-                <Input
-                  accept="image/*"
-                  id="icon-button-file"
-                  type="file"
-                  sx={{ marginTop: 2 }}
-                />
-                <IconButton
-                  color="primary"
-                  aria-label="upload picture"
-                  component="span"
-                >
-                  <PhotoCameraIcon />
-                </IconButton>
-              </label>
-              <Button
-                variant="contained"
-                sx={{ marginTop: 2 }}
-                onClick={handleSubmit}
-              >
-                Guardar
-              </Button>
-            </form>
-          )}
-        </Box>
-      </Modal>
     );
   };
 
@@ -418,7 +129,6 @@ const CompanyData = () => {
         {renderTabsMenu()}
         {renderCompanyData()}
       </Grid>
-      {renderEditCompanyDataModal()}
     </>
   );
 };

@@ -1,5 +1,4 @@
-const baseBackendURL =
-  "https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws";
+const baseBackendURL = "https://ec2-52-7-119-146.compute-1.amazonaws.com";
 
 export const obtenerProductosPorEmpresa = async (cid) => {
   let url = baseBackendURL + `/productos/empresa/${cid}`;
