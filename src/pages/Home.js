@@ -21,9 +21,14 @@ const Home = (props) => {
     return (
       <>
         <Hero />
-        <Typography variant="h4" color="primary" align="center" style={{ fontWeight: 'bold' }}>
-        Marcas
-      </Typography>
+        <Typography
+          variant="h4"
+          color="primary"
+          align="center"
+          style={{ fontWeight: "bold" }}
+        >
+          Marcas
+        </Typography>
         <GrillaEmpresas />
         <Button
           variant="contained"
@@ -40,8 +45,10 @@ const Home = (props) => {
   return isAuthenticated ? (
     user.isProvider ? (
       <HomeBusiness />
-    ) : (
+    ) : window.location.host === "marketplace.deliver.ar" ? (
       renderUserHome()
+    ) : (
+      <HomeBusiness />
     )
   ) : (
     renderUserHome()
