@@ -11,8 +11,6 @@ import CloseIcon from "@mui/icons-material/Close"; // Importa el ícono de cierr
 import GetAppIcon from "@mui/icons-material/GetApp";
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
-// Custom components
-
 // External component library
 import {
   IconButton,
@@ -49,15 +47,17 @@ const ColoredTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const MisPedidosCliente = () => {
-  const userId = "8337531602"; //TODO: Agarrarlo del context
+  //const userId = "8337531602"; //TODO: Agarrarlo del context
+  const dni = "112233";  //Para obtener los pedidos necesito el dni del usuario (se pasa por url) - acomodar link en navbar que esta harcodeado
   const [listaPedidos, setListaPedidos] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
 
   async function fetchPedidos() {
     try {
-      const pedidos = await obtenerPedidosUsuario(userId);
+      const pedidos = await obtenerPedidosUsuario(dni);
       setListaPedidos(pedidos);
+      console.log("pedidos", pedidos)
     } catch (error) {
       console.error("Error al obtener pedidos:", error);
     }
@@ -65,19 +65,16 @@ const MisPedidosCliente = () => {
 
   useEffect(() => {
     fetchPedidos();
-  }, [userId]);
+  }, [dni]);
 
-  function descargarArchivo(nombreArchivo) {
-    if (nombreArchivo) {
-      const urlArchivo = `URL_DEL_SERVIDOR/${nombreArchivo}`;
-      const link = document.createElement('a');
-      link.href = urlArchivo;
-      link.download = nombreArchivo;
-      link.click();
+  const handleDescargarArchivo = (url) => {
+    if (url) {
+      // Descargar la factura desde la URL
+      window.open(url, '_blank');
     } else {
       setSnackbarOpen(true);
     }
-  }
+  };
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -90,7 +87,7 @@ const MisPedidosCliente = () => {
 
   return (
     <StyledContainer>
-      <Typography variant="h3" color="primary" align="center" mb={4}>
+      <Typography variant="h4" color="primary" align="center" style={{ fontWeight: 'bold' }} mb={4}>
         Mis pedidos
       </Typography>
       <div style={tableContainerStyles}>
@@ -107,17 +104,16 @@ const MisPedidosCliente = () => {
             </TableHead>
             <TableBody>
               {listaPedidos.map((row) => (
-                <TableRow key={row.uId}>
+                <TableRow key={row.purchase_id}>
                   <TableCell align="center" component="th" scope="row">
-                    {row.uId}
+                    {row.purchase_id}
                   </TableCell>
-                  <TableCell align="center">{row.pagado ? 'Pago' : 'Sin pagar'}</TableCell>
+                  <TableCell align="center">{row.isPaid ? 'Pago' : 'Sin pagar'}</TableCell>
                   <TableCell align="center">{row.total}</TableCell>
                   <TableCell align="center">
-                    <IconButton color="primary" onClick={() => descargarArchivo(row.nombreArchivo)}>
+                    <IconButton color="primary" onClick={() => handleDescargarArchivo(row.bill_url)}>
                       <GetAppIcon />
                     </IconButton>
-
                   </TableCell>
                   <TableCell align="center">
                     <IconButton color="primary" onClick={handleCarritoClick}>

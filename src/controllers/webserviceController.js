@@ -1,5 +1,5 @@
 const urlApi =
-  "https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws/";
+  "http://ec2-52-7-119-146.compute-1.amazonaws.com/";
 console.log("url", urlApi);
 
 const urlWebServices = {
@@ -7,18 +7,21 @@ const urlWebServices = {
     //marcas o empresas
     obtenerEmpresas: urlApi +"empresas",
     obtenerRubros: urlApi +"productos/rubro",
-    obtenerCategoriasPorRubro: urlApi + "/productos/rubro/",
-    obtenerProductosEmpresa: urlApi + "/productos/empresa/",
+    obtenerCategoriasPorRubro: urlApi + "productos/rubro/",
+    obtenerProductosEmpresa: urlApi + "productos/empresa/",
 
     //usuarios
     obtenerDatosUsuario: urlApi +"usuarios/",
     editarDatosUsuario: urlApi +"usuarios/",
 
     //pedidos
-    obtenerPedidosUsuario: urlApi +"pedidos/usuario/",
+    obtenerPedidosUsuario: urlApi +"purchase/estado/",
    
     //productos
-    Productos: urlApi + "/productos",
+    Productos: urlApi +"productos",
+
+    //carrito
+    enviarCarrito: urlApi +"purchase"
     
 };
 

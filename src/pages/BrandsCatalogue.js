@@ -18,7 +18,7 @@ const StyledContainer = styled(`div`)({
 const BrandsCatalogue = (props) => {
   return (
     <StyledContainer>
-      <Typography variant="h3" color="primary" align="center">
+      <Typography variant="h4" color="primary" align="center" style={{ fontWeight: 'bold' }}>
         Marcas
       </Typography>
       <GrillaEmpresas />

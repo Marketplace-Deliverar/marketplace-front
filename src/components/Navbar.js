@@ -27,7 +27,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   paddingTop: theme.spacing(0),
 }));
 
-const Navbar = ({ userIsAuthenticated = false }) => {
+const Navbar = ({ userIsAuthenticated = true }) => {
   const { cart } = useCartContext();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(userIsAuthenticated); // TODO: VOlver a false
@@ -42,7 +42,7 @@ const Navbar = ({ userIsAuthenticated = false }) => {
     if (!isAuthenticated) {
       setMenuOptions([
         {
-          label: "Iniciar sesion / registrarse",
+          label: "Iniciar sesion / Registrarse",
           onClick: () => navigate("/login"),
         },
       ]);
@@ -80,7 +80,7 @@ const Navbar = ({ userIsAuthenticated = false }) => {
           },
           {
             label: "Mis pedidos",
-            onClick: () => navigate("/pedidos"),
+            onClick: () => navigate("/purchase/estado/112233"), //harcodeado: acomodar
           },
           {
             label: "Cerrar sesión",

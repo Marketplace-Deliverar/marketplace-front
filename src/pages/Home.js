@@ -16,15 +16,15 @@ const Home = (props) => {
   const navigate = useNavigate();
   const domain = window.location.hostname;
   // TODO: Validar empresa o usuario con provider de autenticacion
-  const isCompany = domain.startsWith("marketplace.deliver.ar");
+  const isCompany = domain.startsWith("localhost");
 
   const renderUserHome = () => {
     return (
       <>
         <Hero />
-        <Typography variant="h3" color="primary" align="center">
-          Marcas
-        </Typography>
+        <Typography variant="h4" color="primary" align="center" style={{ fontWeight: 'bold' }}>
+        Marcas
+      </Typography>
         <GrillaEmpresas />
         <Button
           variant="contained"

@@ -21,7 +21,8 @@ import Stack from "@mui/material/Stack";
 
 export default function HomeBusiness(props) {
   //TODO: Volverlo atras
-  const empresaURL = window.location.hostname;
+  //const empresaURL = window.location.hostname;
+  const empresaURL = "fravega.marketplace.deliver.ar";
   const { changeTheme } = useThemeContext();
   const [empresa, setEmpresa] = useState(null);
   const [imagen, setImagen] = useState("");

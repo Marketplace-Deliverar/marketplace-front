@@ -7,7 +7,7 @@ export const obtenerEmpresa = async function (id) {
             method: 'GET',
             mode: "cors",
             headers: {
-                'Origin': 'https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws/'
+                'Origin': 'http://ec2-52-7-119-146.compute-1.amazonaws.com/'
             }
         });
         if (response.status === 200) {

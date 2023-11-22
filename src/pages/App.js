@@ -53,7 +53,7 @@ const App = () => {
               {/* Cuando el usuario esta loggeado e ingresa por menu a la opcion "Mis perfil"*/}
               <Route path="/perfil" element={<Profile />} />
               {/* Cuando el usuario esta loggeado e ingresa por menu a la opcion "Mis pedidos"*/}
-              <Route path="/pedidos" element={<MisPedidosCliente />} />
+              <Route path="/purchase/estado/:dni" element={<MisPedidosCliente />} />
               <Route path="/carrito" element={<CarritoCompras />} />
 
               {/* Cuando la empresa loggeada ingresa por menu a la opcion "Mis datos"*/}

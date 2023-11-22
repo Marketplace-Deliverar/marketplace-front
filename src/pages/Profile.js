@@ -24,8 +24,8 @@ const StyledContainer = styled(`div`)({
 });
 
 const Profile = (props) => {
-  //const { uId } = useParams(); // Obtiene el parámetro "uId" de la URL
-  const userId = "user_2XLq6Lb94pRk43JtdRmRI0e0PkU"; //TODO: Volver atras y obtenerlo del usuario loggeado en auth context
+  // const { uId } = useParams(); // Obtiene el parámetro "uId" de la URL
+  const userId = "user_2XLq6Lb94pRk43JtdRmRI0e0PkU"; // TODO: Volver atrás y obtenerlo del usuario loggeado en auth context
   const [userData, setUserData] = useState({
     nombre: "",
     apellido: "",
@@ -90,7 +90,13 @@ const Profile = (props) => {
 
   return (
     <StyledContainer>
-      <Typography variant="h3" color="primary" align="center">
+      <Typography
+        variant="h4"
+        color="primary"
+        align="center"
+        style={{ fontWeight: "bold" }}
+        mb={4}
+      >
         Mis datos
       </Typography>
       <Grid container justifyContent="center">
@@ -106,7 +112,10 @@ const Profile = (props) => {
               flexDirection: "column",
               alignItems: "center",
               padding: "16px",
-              "& .MuiTextField-root": { marginBottom: 3, width: "100%" },
+              "& .MuiTextField-root": {
+                marginBottom: 3,
+                width: "100%",
+              },
             }}
             noValidate
             autoComplete="off"
@@ -122,6 +131,7 @@ const Profile = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              disabled // Campo de solo lectura
             />
             <TextField
               required
@@ -134,6 +144,7 @@ const Profile = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              disabled // Campo de solo lectura
             />
             <TextField
               required
@@ -146,6 +157,7 @@ const Profile = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              disabled // Campo de solo lectura
             />
             <TextField
               required
@@ -159,6 +171,7 @@ const Profile = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              disabled // Campo de solo lectura
             />
             <TextField
               required
@@ -171,6 +184,7 @@ const Profile = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              disabled // Campo de solo lectura
             />
             <TextField
               required
@@ -183,10 +197,8 @@ const Profile = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
+              disabled // Campo de solo lectura
             />
-            <Button variant="contained" color="primary" onClick={handleSave}>
-              Guardar Cambios
-            </Button>
           </Box>
         </Grid>
       </Grid>

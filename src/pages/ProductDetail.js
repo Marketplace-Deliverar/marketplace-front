@@ -167,7 +167,7 @@ const ProductDetails = () => {
               onClick={handleComprarClick}
             >
               {/* <Button variant="contained" mb={2} onClick={handleComprarClick}> */}
-              Comprar
+              Agregar al Carrito
             </Button>
           </Grid>
           <Grid
@@ -248,7 +248,7 @@ const ProductDetails = () => {
           <Snackbar
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             open={snackbarOpen}
-            autoHideDuration={6000}
+            autoHideDuration={2000}
             onClose={handleSnackbarClose}
             message="Producto agregado al carrito"
             action={

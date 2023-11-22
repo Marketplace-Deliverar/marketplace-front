@@ -1,19 +1,20 @@
 import urlWebServices from './webserviceController';
 
-export const obtenerPedidosUsuario = async function (uId) {
-    let url = urlWebServices.obtenerPedidosUsuario +`${uId}`;
+export const obtenerPedidosUsuario = async function (dni) {
+    let url = urlWebServices.obtenerPedidosUsuario +`${dni}`;
+    console.log("url", url)
     try {
         let response = await fetch(url, {
             method: 'GET',
             mode: "cors",
             headers: {
-                'Origin': 'https://xorn7asoxb4eecmwmszz5fbc3a0wamui.lambda-url.us-east-1.on.aws/'
+                'Origin': 'http://ec2-52-7-119-146.compute-1.amazonaws.com/'
             }
         });
         if (response.status === 200) {
             let data = await response.json();
             let listaPedidos = data
-            console.log(data)
+            console.log("data pedidos", data)
             return listaPedidos;
         }
         else {

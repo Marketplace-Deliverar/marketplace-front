@@ -150,7 +150,7 @@ const GrillaEmpresas = () => {
             alignSelf="center"
             fullWidth={true}
           >
-            No hay empresas para el filtro indicado
+            Aún no hay empresas
           </Typography>
         )
       ) : (

@@ -12,11 +12,6 @@ import {
   Avatar,
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   IconButton,
   Table,
@@ -30,6 +25,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useCartContext } from "../context/CartContextProvider";
+import { enviarCarrito } from "../controllers/carritoController";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -78,50 +74,55 @@ const CarritoCompras = (props) => {
     return cart.reduce((total, producto) => total + producto.price * producto.cantidad, 0);
   };
 
-  const handleClickOpenPopup = () => {
-    setOpenPopup(true);
-    console.log('Ir a Pagar');
-  };
-
-  const handleClosePopup = () => {
-    setOpenPopup(false);
-  };
-
   const handleInputChange = (event) => {
     const inputValue = event.target.value;
     setLoteValue(inputValue);
   };
 
-  // Renders
-  const renderDialog = () => {
-    return (
-      <Dialog open={openPopup} onClose={handleClosePopup}>
-        <DialogTitle>¡Gracias por realizar tu Compra!</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Tu factura estará disponible en la sección "Mis Pedidos" en los
-            próximos días
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button color="primary" onClick={() => navigate("/")}>
-            Aceptar
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+  const enviar_a_pagos = async (cart) => {
+    console.log("Llega a enviar carrito", cart);
+
+    try {
+      const carrito = {
+        product_name: cart[0].title,
+        product_price: cart[0].price,
+        product_amount: cart[0].cantidad,
+        product_marketplace: "", //ver
+        product_marketplace_cuit: 0, //ver
+        delivery_lot: loteValue, //ver
+        user_name: "string", //ver
+        user_email: "string", //ver
+        user_document: "string", //ver
+      };
+
+      console.log("Datos del carrito a enviar", carrito);
+
+      const response = await enviarCarrito(carrito);
+
+      if (response.rdo === 0) {
+        //navigate("/") --> ver
+
+      } else {
+
+        console.error("Error en la respuesta del servidor:", response.mensaje);
+        alert("Error al procesar el pago. Inténtelo nuevamente o contacte al soporte.");
+      }
+    } catch (error) {
+      console.error("Error en la solicitud de envío de carrito:", error);
+
+    }
   };
 
   return (
     <StyledContainer>
-      <Typography variant="h3" color="primary" align="center" mb={2}>
+      <Typography variant="h4" color="primary" align="center" style={{ fontWeight: 'bold' }} mb={2}>
         Mi carrito
       </Typography>
       <div style={{ margin: '0 40px', marginBottom: '40px' }}>
         <Grid container spacing={3} style={{ paddingTop: '40px' }}>
           <Grid item xs={12} sm={8}>
-            <div>
-              <TableContainer component={Paper} style={{ padding: '20px', maxWidth: '900px', float: 'left' }}>
+            <div style={{ marginRight: '150px' }}>
+              <TableContainer component={Paper} style={{ padding: '20px', width: '130%', margin: 'left' }}>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
@@ -165,7 +166,7 @@ const CarritoCompras = (props) => {
             </div>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Box style={{ backgroundColor: '#f5f5f5', padding: '20px', borderRadius: '8px' }}>
+            <Box style={{ backgroundColor: '#f5f5f5', padding: '20px', borderRadius: '8px', textAlign: 'left' }}>
               <Typography variant="h6" gutterBottom style={{ color: '#1976d2', textTransform: 'capitalize', fontWeight: 'bold', marginBottom: '30px' }}>
                 Resumen de Compra
               </Typography>
@@ -197,32 +198,18 @@ const CarritoCompras = (props) => {
                   variant="contained"
                   color="primary"
                   style={{ textTransform: 'capitalize' }}
-                  onClick={handleClickOpenPopup}
+                  onClick={() => {
+                    enviar_a_pagos(cart);
+                  }}
                   disabled={!loteValue.trim()}
                 >
                   Ir a Pagar
                 </Button>
               </div>
-
-              {/* Ventana emergente */}
-              <Dialog open={openPopup} onClose={handleClosePopup}>
-                <DialogTitle>¡Gracias por realizar tu Compra!</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Tu factura estará disponible en la sección "Mis Pedidos" en los próximos días
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button color="primary" onClick={() => navigate("/")}>
-                    Aceptar
-                  </Button>
-                </DialogActions>
-              </Dialog>
             </Box>
           </Grid>
         </Grid>
       </div>
-      {renderDialog()}
     </StyledContainer>
   );
 };

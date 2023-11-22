@@ -27,7 +27,7 @@ const ProductCards = ({ empresa }) => {
     async function fetchProductos() {
       if (empresa !== null && empresa.uId !== undefined) {
         try {
-          console.log("empresa.uid", empresa.uid);
+          console.log("empresa.uid", empresa.uId);
           const Productos = await obtenerProductosEmpresa(empresa.uId);
           console.log(Productos);
           setListaProductos(Productos);
