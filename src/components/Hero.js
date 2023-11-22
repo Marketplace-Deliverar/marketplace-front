@@ -1,82 +1,76 @@
 import React from "react";
-import background from '../media/background.jpg';
-import { Typography, Paper, Container } from '@mui/material';
-import Description from "../components/Description";
-import MyButton from "../components/MyButton";
-import useMediaQuery from '@mui/material/useMediaQuery';
 
-export default function Hero() {
-  const descriptionText = "Bienvenidos a Deliver.ar, la innovadora solución de entrega a domicilio que está revolucionando la forma en que recibes tus pedidos en Lago Escobar. ¿Te imaginas recibir tus alimentos favoritos, productos de tiendas locales y más, entregados por adorables robots repartidores? ¡En Deliver.ar, lo hacemos posible!";
+// Styles, images & icons
+import background from "../media/background.jpg";
+import styled from "@emotion/styled";
 
-  const containerStyle = {
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-  };
+// External component library
+import { Typography, Paper } from "@mui/material";
 
-  const imageStyle = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  };
+const StyledContainer = styled(`div`)({
+  display: "flex",
+  flexDirection: "column",
+  minHeight: "100vh",
+  padding: "5rem",
 
-  const overlayStyle = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-  };
+  alignContent: "center",
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: "center",
+});
 
-  const isMobile = useMediaQuery('(max-width:600px)'); // Detectar si es un dispositivo móvil
+const StyledImage = styled(`img`)({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+});
 
-  const paperStyle = {
-    padding: isMobile ? '10px' : '30px',
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    textAlign: 'left',
-    position: 'absolute',
-    top: isMobile ? '40%' : '50%',
-    left: isMobile ? '0%' : '25%',
-    transform: isMobile ? '' : 'translate(-50%, -30%)',
-    border: "none",
-    boxShadow: "none",
-    maxWidth: isMobile ? '100%' : '50%',
-    whiteSpace: isMobile ? 'nowrap' : 'pre-line',
-    color: '#FFFFFF', // Establecer el color de texto en blanco
-  };
+const StyledOverlay = styled(`div`)({
+  zIndex: 0,
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backgroundColor: "rgba(0, 0, 0, 0.6)",
+});
 
-  const h5Style = {
-    color: '#FF6B35',
-    fontFamily: 'Montserrat, sans-serif',
-    fontSize: isMobile ? '12px' : '14px',
-  };
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "flex-start",
+  textAlign: "left",
+  width: "100%",
 
-  const h1Style = {
-    color: '#FFFFFF',
-    fontFamily: 'Montserrat, sans-serif',
-    fontSize: isMobile ? '28px' : '38px',
-    fontWeight: 'bold',
-  };
+  background: "transparent",
+  zIndex: 1,
+  color: theme.palette.primary.contrastText, // Establecer el color de texto en blanco
+}));
+
+const Hero = () => {
+  const descriptionText =
+    "Bienvenidos a Deliver.ar, la innovadora solución de entrega a domicilio que está revolucionando la forma en que recibes tus pedidos en Lago Escobar. ¿Te imaginas recibir tus alimentos favoritos, productos de tiendas locales y más, entregados por adorables robots repartidores? ¡En Deliver.ar, lo hacemos posible!";
 
   return (
-    <Container maxWidth={false} style={containerStyle}>
-      <img src={background} alt="Background" style={imageStyle} />
-      <div style={overlayStyle}></div>
-      <Paper style={paperStyle}>
-        <Typography variant="h5" gutterBottom style={h5Style}>
+    <StyledContainer>
+      <StyledImage src={background} alt="Background" />
+      <StyledOverlay />
+      <StyledPaper>
+        <Typography variant="subtitle2" color="secondary">
           INDUSTRIAS ARGENTINAS
         </Typography>
-        <Typography variant="h3" gutterBottom style={h1Style}>
-          Deliver.ar
-        </Typography>
-        <Typography style={{ whiteSpace: 'pre-line' }} gutterBottom>
+        <Typography variant="h3">Deliver.ar</Typography>
+
+        <Typography variant="body1" mt={2} maxWidth={"50rem"}>
           {descriptionText}
         </Typography>
-      </Paper>
-    </Container>
+      </StyledPaper>
+    </StyledContainer>
   );
-}
+};
+
+export default Hero;

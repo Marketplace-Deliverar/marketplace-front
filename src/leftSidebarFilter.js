@@ -78,12 +78,13 @@ export const LeftSidebarFilter = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: "#F5F5F5", width: "212px", p: "24px" }}>
+    <Box sx={{ bgcolor: "#F5F5F5", width: "400px", p: "24px" }}>
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         mb={2}
+        paddingLeft={"20px"}
       >
         <Box fontSize="h6.fontSize" fontWeight="bold">
           Filtros

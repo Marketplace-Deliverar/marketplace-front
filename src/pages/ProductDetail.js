@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from "react";
-
-// Apis
-import { obtenerProductosPorEmpresa } from "../apis/productApis";
-
-// Styling and icons
 import styled from "@emotion/styled";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-
-// Components
-import { useTheme } from "@emotion/react";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
 import {
   Box,
   Button,
@@ -19,7 +9,16 @@ import {
   MobileStepper,
   Paper,
   Typography,
+  Snackbar,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useTheme } from "@emotion/react";
+import SwipeableViews from "react-swipeable-views";
+import { autoPlay } from "react-swipeable-views-utils";
+import { useNavigate } from "react-router-dom";
+import { obtenerProductosPorEmpresa } from "../apis/productApis";
+import { useCartContext } from "../context/CartContextProvider";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -32,23 +31,25 @@ const StyledContainer = styled(`div`)({
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const ProductDetails = (props) => {
+const ProductDetails = () => {
   const theme = useTheme();
+  const { addToCart } = useCartContext();
   const companyID = window.location.pathname.split("/")[1];
   const productID = window.location.pathname.split("/")[3];
   const [activeStep, setActiveStep] = React.useState(0);
-  const [loading, setLoading] = useState(false);
   const [productData, setProductData] = useState({});
+  const [seAgregoAlCarrito, setSeAgregoAlCarrito] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  // Lifecycle
   useEffect(() => {
     const fetchData = async () => {
-      await obtenerProductosPorEmpresa(companyID)
-        .then((data) => {
-          if (data) {
-            let product = data.find((item) => item.uId === productID);
-            console.log(product)
-            product = {
+      try {
+        const data = await obtenerProductosPorEmpresa(companyID);
+        if (data) {
+          const product = data.find((item) => item.uId === productID);
+          if (product) {
+            setProductData({
+              uId: productID,
               title: product.titulo,
               description: product.description,
               brand: product.marca,
@@ -61,24 +62,24 @@ const ProductDetails = (props) => {
               ],
               validateStock: product.stock,
               stock: product.nro_stock,
-            };
-            setProductData(product);
+            });
           }
-          return;
-        })
-        .catch((error) => console.error(error));
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    if (!loading) {
-      setLoading(true);
-      fetchData();
-      setLoading(false);
-    }
-  }, []);
+    fetchData();
+  }, [companyID, productID]);
 
   // Extra functionallity
 
   // Handlers
+  const handleBuyButtonClick = () => {
+    //TODO: Pending add to cart funct
+  };
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -91,7 +92,36 @@ const ProductDetails = (props) => {
     setActiveStep(step);
   };
 
-  // Renders
+  const handleComprarClick = () => {
+    setSeAgregoAlCarrito(true);
+    setSnackbarOpen(true);
+    console.log("enviar datos", productData);
+
+    const nuevoProducto = {
+      id: productData.uId,
+      title: productData.title,
+      description: productData.description,
+      brand: productData.brand,
+      cantidad: 1,
+      category: productData.category,
+      subCategory: productData.subCategory,
+      price: productData.price,
+      images: productData.images,
+      stock: productData.stock,
+
+    };
+    addToCart(nuevoProducto);
+    //console.log("carrito boton:", carrito)
+    //navigate('/carrito', { state: { carrito: [...carrito, nuevoProducto] } });
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway" || !snackbarOpen) {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
   const renderImageCarrousel = () => {
     return (
       <Paper
@@ -130,8 +160,14 @@ const ProductDetails = (props) => {
             <Typography variant="h6" align="end" pr={2}>
               ${productData.price}
             </Typography>
-            <Button variant="contained" mb={2}>
-              Comprar
+            <Button
+              variant="contained"
+              color="primary"
+              mb={2}
+              onClick={handleComprarClick}
+            >
+              {/* <Button variant="contained" mb={2} onClick={handleComprarClick}> */}
+              Agregar al Carrito
             </Button>
           </Grid>
           <Grid
@@ -156,8 +192,8 @@ const ProductDetails = (props) => {
                       alt={productData.title}
                       sx={{
                         overflow: "hidden",
-                        maxWidth: "100%", // Controla el ancho máximo
-                        maxHeight: "400px", // Controla la altura máxima
+                        maxWidth: "100%",
+                        maxHeight: "400px",
                       }}
                     />
                   ) : null}
@@ -173,6 +209,7 @@ const ProductDetails = (props) => {
                   size="small"
                   onClick={handleNext}
                   disabled={activeStep === productData.images?.length - 1}
+                  color="primary"
                 >
                   Next
                   {theme.direction === "rtl" ? (
@@ -187,6 +224,7 @@ const ProductDetails = (props) => {
                   size="small"
                   onClick={handleBack}
                   disabled={activeStep === 0}
+                  color="primary"
                 >
                   {theme.direction === "rtl" ? (
                     <KeyboardArrowRight />
@@ -198,12 +236,46 @@ const ProductDetails = (props) => {
               }
             />
           </Grid>
-        </Grid>
-      </Paper>
+        </Grid >
+      </Paper >
     );
   };
 
-  return <StyledContainer>{renderImageCarrousel()}</StyledContainer>;
+  const Popup = () => {
+    return (
+      <div>
+        {seAgregoAlCarrito && (
+          <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            open={snackbarOpen}
+            autoHideDuration={2000}
+            onClose={handleSnackbarClose}
+            message="Producto agregado al carrito"
+            action={
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={handleSnackbarClose}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            }
+          />
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <StyledContainer>
+      {productData && Object.keys(productData).length > 0 && (
+        <>
+          {renderImageCarrousel()}
+          <Popup />
+        </>
+      )}
+    </StyledContainer>
+  )
 };
 
 export default ProductDetails;
