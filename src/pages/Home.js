@@ -42,16 +42,14 @@ const Home = (props) => {
     );
   };
 
-  return isAuthenticated ? (
-    user.isProvider ? (
-      <HomeBusiness />
-    ) : window.location.host === "marketplace.deliver.ar" ? (
-      renderUserHome()
-    ) : (
-      <HomeBusiness />
-    )
-  ) : (
+  if (!isAuthenticated) return renderUserHome();
+  if (user?.isProvider) return <HomeBusiness />;
+
+  //) : window.location.host === "marketplace.deliver.ar" ? (
+  return window.location.host == "localhost:3000" ? (
     renderUserHome()
+  ) : (
+    <HomeBusiness />
   );
 };
 

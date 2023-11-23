@@ -33,12 +33,20 @@ const ProductCards = (props) => {
     const fetchProductos = async () => {
       setLoading(true);
       try {
-        let response = await getbrandByURL(user.domain);
-        if (response) {
+        let response;
+
+        if (user.isProvider) {
+          // For brands looking into their site
+          response = await getbrandByURL(user.domain);
+        } else {
+          // For users looking into brand site
+          response = await getbrandByURL(window.location.host);
+        }
+        if (response && response.error == undefined) {
           setIdEmpresa(response.uId);
           const productos = await obtenerProductosEmpresa(response.uId);
-          if (productos) setListaProductos(productos);
-        }
+          if (typeof productos === "object") setListaProductos(productos);
+        } else setListaProductos([]);
       } catch (error) {
         console.error("Error al obtener empresa y/o productos:", error);
       }
@@ -68,7 +76,7 @@ const ProductCards = (props) => {
           )}
         </Grid>
       ) : (
-        listaProductos.map((card, index) => (
+        listaProductos?.map((card, index) => (
           <Card
             key={index}
             sx={{ width: 345, height: 400 }}
