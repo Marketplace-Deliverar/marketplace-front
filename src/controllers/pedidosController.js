@@ -1,5 +1,5 @@
 import urlWebServices from "./webserviceController";
-let backendURL = "http://marketplace-back.deliver.ar";
+let backendURL = "https://marketplace-back.deliver.ar";
 
 export const obtenerPedidosUsuario = async function (uId) {
   let url = urlWebServices.obtenerPedidosUsuario + `${uId}`;

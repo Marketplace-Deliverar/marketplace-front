@@ -1,4 +1,4 @@
-const urlApi = "http://marketplace-back.deliver.ar/";
+const urlApi = "https://marketplace-back.deliver.ar/";
 console.log("url", urlApi);
 
 const urlWebServices = {

@@ -8,7 +8,7 @@ export const enviarCarrito = async function (carrito) {
       method: "POST",
       mode: "cors",
       headers: {
-        Origin: "http://marketplace-back.deliver.ar/",
+        Origin: "https://marketplace-back.deliver.ar/",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(carrito),
