@@ -89,7 +89,7 @@ const CarritoCompras = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response = await getbrandByURL(window.location.businessName);
+        let response = await getbrandByURL(window.location.host);
         console.log("response:", response)
         if (response) {
           businessName = response.businessName;
@@ -112,13 +112,14 @@ const CarritoCompras = (props) => {
         product_name: cart[0].title,
         product_price: cart[0].price,
         product_amount: cart[0].cantidad,
-        product_marketplace: businessName, //ver
-        product_marketplace_cuit: cuit, //ver
+        product_marketplace: "", //ver
+        product_marketplace_cuit: "",  //ver
         delivery_lot: loteValue,
         user_name: user.name,
         user_email: user.email,
         user_document: user.dni,
       };
+      console.log("hola")
 
       console.log("Datos del carrito a enviar", carrito);
 

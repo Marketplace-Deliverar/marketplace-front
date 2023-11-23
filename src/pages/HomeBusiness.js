@@ -42,6 +42,7 @@ export default function HomeBusiness(props) {
 
     if (isSuccess) {
       setOpenModal(true);
+      
     } else {
       if (!isAuthenticated) navigate("/");
     }
