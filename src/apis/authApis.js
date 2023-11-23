@@ -1,4 +1,4 @@
-const baseBackendURL = "http://marketplace-back.deliver.ar";
+const baseBackendURL = "https://marketplace-back.deliver.ar";
 
 export const getLoggedInInformation = async () => {
   let url = baseBackendURL + `/login`;

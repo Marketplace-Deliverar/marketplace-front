@@ -1,4 +1,4 @@
-const baseBackendURL = "http://marketplace-back.deliver.ar";
+const baseBackendURL = "https://marketplace-back.deliver.ar";
 
 export const obtenerProductosPorEmpresa = async (cid) => {
   let url = baseBackendURL + `/empresas/${cid}`;
