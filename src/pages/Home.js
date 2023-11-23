@@ -45,8 +45,8 @@ const Home = (props) => {
   if (!isAuthenticated) return renderUserHome();
   if (user?.isProvider) return <HomeBusiness />;
 
-  //) : window.location.host === "marketplace.deliver.ar" ? (
-  return window.location.host == "localhost:3000" ? (
+  return window.location.host === "marketplace.deliver.ar" ? (
+    //return window.location.host == "localhost:3000" ? (
     renderUserHome()
   ) : (
     <HomeBusiness />
