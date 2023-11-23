@@ -98,7 +98,10 @@ const Navbar = () => {
     <StyledAppBar className="navbar" position="static" sx={{ mb: 0 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link
+            to="https://marketplace.deliver.ar"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>

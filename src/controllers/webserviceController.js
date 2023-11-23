@@ -1,4 +1,4 @@
-const urlApi = "http://ec2-52-7-119-146.compute-1.amazonaws.com/";
+const urlApi = "http://marketplace-back.deliver.ar/";
 console.log("url", urlApi);
 
 const urlWebServices = {
@@ -19,8 +19,7 @@ const urlWebServices = {
   Productos: urlApi + "productos",
 
   //carrito
-  enviarCarrito: urlApi + "purchase"
-
+  enviarCarrito: urlApi + "purchase",
 };
 
 export default urlWebServices;
