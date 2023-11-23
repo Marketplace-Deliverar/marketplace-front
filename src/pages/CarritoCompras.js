@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Styles & icons
@@ -27,6 +27,7 @@ import {
 import { useCartContext } from "../context/CartContextProvider";
 import { enviarCarrito } from "../controllers/carritoController";
 import { useAuth } from "../context/AuthenticationContextProvider";
+import { getbrandByURL } from "../apis/brandApis";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -56,7 +57,10 @@ const CarritoCompras = (props) => {
   const navigate = useNavigate();
   const [openPopup, setOpenPopup] = useState(false);
   const [loteValue, setLoteValue] = useState('');
-  const {isAuthenticated, user} = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  let businessName;
+  let cuit;
+
 
   //windows.location
   const incrementItem = (productId) => {
@@ -82,6 +86,24 @@ const CarritoCompras = (props) => {
     setLoteValue(inputValue);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response = await getbrandByURL(window.location.businessName);
+        console.log("response:", response)
+        if (response) {
+          businessName = response.businessName;
+          cuit = response.cuit;
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   const enviar_a_pagos = async (cart) => {
     console.log("Llega a enviar carrito", cart);
 
@@ -90,11 +112,11 @@ const CarritoCompras = (props) => {
         product_name: cart[0].title,
         product_price: cart[0].price,
         product_amount: cart[0].cantidad,
-        product_marketplace: user.businessName, //ver
-        product_marketplace_cuit: user.cuit, //ver
-        delivery_lot: loteValue, 
-        user_name: user.name, 
-        user_email: user.email, 
+        product_marketplace: businessName, //ver
+        product_marketplace_cuit: cuit, //ver
+        delivery_lot: loteValue,
+        user_name: user.name,
+        user_email: user.email,
         user_document: user.dni,
       };
 
@@ -103,7 +125,7 @@ const CarritoCompras = (props) => {
       const response = await enviarCarrito(carrito);
 
       if (response.rdo === 0) {
-        //navigate("/") --> ver
+        console.error("OK Post");
 
       } else {
 
