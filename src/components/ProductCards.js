@@ -21,9 +21,11 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import { useThemeContext } from "../context/ThemeContextProvider";
 
 const ProductCards = (props) => {
   const navigate = useNavigate();
+  const { changeTheme } = useThemeContext();
   const { isAuthenticated, user } = useAuth();
   const [idEmpresa, setIdEmpresa] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,14 +40,18 @@ const ProductCards = (props) => {
         if (user.isProvider) {
           // For brands looking into their site
           response = await getbrandByURL(user.domain);
+          //response = await getbrandByURL("fravega.marketplace.deliver.ar");
         } else {
           // For users looking into brand site
           response = await getbrandByURL(window.location.host);
+          //response = await getbrandByURL("fravega.marketplace.deliver.ar");
         }
         if (response && response.error == undefined) {
           setIdEmpresa(response.uId);
           const productos = await obtenerProductosEmpresa(response.uId);
           if (typeof productos === "object") setListaProductos(productos);
+          //changeTheme(response.primaryColor, reponse.secondaryColor); TODO: Props tienen que velir con el nombre nuevo, no el viejo
+          //changeTheme(response.color_primario, response.color_secundario); //TODO: Props tienen que velir con el nombre nuevo, no el viejo
         } else setListaProductos([]);
       } catch (error) {
         console.error("Error al obtener empresa y/o productos:", error);
@@ -65,7 +71,7 @@ const ProductCards = (props) => {
 
   return (
     <Grid container display="flex" gap={3}>
-      {listaProductos.length === 0 ? (
+      {listaProductos?.length === 0 ? (
         <Grid item xs={10} textAlign="center" mt={20}>
           {loading ? (
             <CircularProgress />
@@ -93,9 +99,12 @@ const ProductCards = (props) => {
               <Typography variant="h6">${card.precio}</Typography>
             </CardContent>
             <CardActions disableSpacing>
-              <IconButton aria-label="add to favorites">
-                <ShoppingCartIcon />
-              </IconButton>
+              {!isAuthenticated ||
+                (!user.isProvider && (
+                  <IconButton aria-label="add to favorites">
+                    <ShoppingCartIcon />
+                  </IconButton>
+                ))}
             </CardActions>
           </Card>
         ))

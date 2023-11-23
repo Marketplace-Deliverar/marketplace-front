@@ -19,6 +19,7 @@ import { autoPlay } from "react-swipeable-views-utils";
 import { useNavigate } from "react-router-dom";
 import { obtenerProductosPorEmpresa } from "../apis/productApis";
 import { useCartContext } from "../context/CartContextProvider";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -33,6 +34,7 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const ProductDetails = () => {
   const theme = useTheme();
+  const { isAuthenticated, user } = useAuth();
   const { addToCart } = useCartContext();
   const companyID = window.location.pathname.split("/")[1];
   const productID = window.location.pathname.split("/")[3];
@@ -46,7 +48,7 @@ const ProductDetails = () => {
       try {
         const data = await obtenerProductosPorEmpresa(companyID);
         if (data) {
-          const product = data.find((item) => item.uId === productID);
+          const product = data.productos.find((item) => item.uId === productID);
           if (product) {
             setProductData({
               uId: productID,
@@ -76,10 +78,6 @@ const ProductDetails = () => {
   // Extra functionallity
 
   // Handlers
-  const handleBuyButtonClick = () => {
-    //TODO: Pending add to cart funct
-  };
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -108,7 +106,6 @@ const ProductDetails = () => {
       price: productData.price,
       images: productData.images,
       stock: productData.stock,
-
     };
     addToCart(nuevoProducto);
     //console.log("carrito boton:", carrito)
@@ -165,6 +162,7 @@ const ProductDetails = () => {
               color="primary"
               mb={2}
               onClick={handleComprarClick}
+              disabled={!isAuthenticated || user.isProvider}
             >
               {/* <Button variant="contained" mb={2} onClick={handleComprarClick}> */}
               Agregar al Carrito
@@ -236,8 +234,8 @@ const ProductDetails = () => {
               }
             />
           </Grid>
-        </Grid >
-      </Paper >
+        </Grid>
+      </Paper>
     );
   };
 
@@ -275,7 +273,7 @@ const ProductDetails = () => {
         </>
       )}
     </StyledContainer>
-  )
+  );
 };
 
 export default ProductDetails;

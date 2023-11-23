@@ -1,7 +1,7 @@
-const baseBackendURL = "https://ec2-52-7-119-146.compute-1.amazonaws.com";
+const baseBackendURL = "http://ec2-52-7-119-146.compute-1.amazonaws.com";
 
 export const obtenerProductosPorEmpresa = async (cid) => {
-  let url = baseBackendURL + `/productos/empresa/${cid}`;
+  let url = baseBackendURL + `/empresas/${cid}`;
   let result = [];
   await fetch(url, {
     method: "GET",

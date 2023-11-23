@@ -45,7 +45,7 @@ const Navbar = () => {
         },
       ]);
     } else {
-      if (user.isProvider) {
+      if (user?.isProvider) {
         setMenuOptions([
           {
             label: "Mis datos",
@@ -78,9 +78,7 @@ const Navbar = () => {
           {
             label: "Cerrar sesión",
             onClick: () => {
-              localStorage.clear();
               logout();
-              window.location.reload();
             },
           },
         ]);
@@ -104,7 +102,7 @@ const Navbar = () => {
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>
-          {isAuthenticated && !user.isProvider && (
+          {isAuthenticated && !user?.isProvider && (
             <>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 ¡Bienvenida {user?.name}!
@@ -115,7 +113,7 @@ const Navbar = () => {
                 color="inherit"
                 onClick={() => navigate("/carrito")}
               >
-                <Badge badgeContent={cart.length} color="error">
+                <Badge badgeContent={cart?.length} color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>

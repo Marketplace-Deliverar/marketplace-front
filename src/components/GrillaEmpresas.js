@@ -43,7 +43,7 @@ const GrillaEmpresas = () => {
       // Empresas
       try {
         const empresas = await obtenerEmpresas();
-        setListaEmpresas(empresas);
+        if (empresas) setListaEmpresas(empresas);
       } catch (error) {
         console.error("Error al obtener empresas:", error);
       }
@@ -98,7 +98,7 @@ const GrillaEmpresas = () => {
   const startIndex = (page - 1) * cardsPerPage;
   const endIndex = Math.min(
     startIndex + cardsPerPage,
-    filteredEmpresasArray.length
+    filteredEmpresasArray?.length
   );
   const displayedCards = filteredEmpresasArray.slice(startIndex, endIndex);
 
@@ -140,7 +140,7 @@ const GrillaEmpresas = () => {
         </Grid>
       )}
 
-      {displayedCards.length === 0 ? (
+      {displayedCards?.length === 0 ? (
         loading ? (
           <CircularProgress />
         ) : (
@@ -148,7 +148,7 @@ const GrillaEmpresas = () => {
             variant="body1"
             textAlign="center"
             alignSelf="center"
-            fullWidth={true}
+            mb={4}
           >
             Aún no hay empresas
           </Typography>
@@ -177,7 +177,9 @@ const GrillaEmpresas = () => {
                 marginBottom="40px"
               >
                 <Pagination
-                  count={Math.ceil(filteredEmpresasArray.length / cardsPerPage)}
+                  count={Math.ceil(
+                    filteredEmpresasArray?.length / cardsPerPage
+                  )}
                   page={page}
                   onChange={handlePageChange}
                   color="primary"
