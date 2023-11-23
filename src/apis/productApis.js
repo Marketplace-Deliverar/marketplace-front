@@ -1,4 +1,4 @@
-const baseBackendURL = "http://ec2-52-7-119-146.compute-1.amazonaws.com";
+const baseBackendURL = "http://marketplace-back.deliver.ar";
 
 export const obtenerProductosPorEmpresa = async (cid) => {
   let url = baseBackendURL + `/empresas/${cid}`;
