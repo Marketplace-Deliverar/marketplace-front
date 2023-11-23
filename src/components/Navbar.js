@@ -41,7 +41,7 @@ const Navbar = () => {
       setMenuOptions([
         {
           label: "Iniciar sesion / Registrarse",
-          onClick: () => navigate("/login"), //TODO: cambiar por ruta de login de modulo usuarios
+          onClick: () => navigate("/"), //TODO: cambiar por ruta de login de modulo usuarios
         },
       ]);
     } else {
@@ -104,8 +104,8 @@ const Navbar = () => {
             <img src={logo} alt="Logo" style={{ height: 20 }} />
           </Link>
           <div style={{ flexGrow: 1 }}></div>
-          {isAuthenticated &&
-            !user.isProvider && (<>
+          {isAuthenticated && !user.isProvider && (
+            <>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 ¡Bienvenida {user?.name}!
               </Typography>
@@ -120,7 +120,7 @@ const Navbar = () => {
                 </Badge>
               </IconButton>
             </>
-            )}
+          )}
           <IconButton
             size="large"
             aria-label="account of current user"

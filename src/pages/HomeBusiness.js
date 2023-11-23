@@ -16,6 +16,7 @@ import { useAuth } from "../context/AuthenticationContextProvider";
 
 // External components
 import { Box, Button, Modal, Stack, Typography } from "@mui/material";
+import { getbrandByURL } from "../apis/brandApis";
 
 export default function HomeBusiness(props) {
   const navigate = useNavigate();
@@ -27,12 +28,28 @@ export default function HomeBusiness(props) {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const successParam = urlSearchParams.get("success");
     const isSuccess = successParam === "true";
+    const fetchData = async () => {
+      try {
+        let response = await getbrandByURL(window.location.host);
+        if (response) {
+          changeTheme(response.primaryColor, response.secondaryColor);
+        }
+      } catch (error) {
+        console.error("Error al obtener empresa y/o productos:", error);
+      }
+    };
 
     if (isSuccess) {
       setOpenModal(true);
+    } else {
+      if (!isAuthenticated) navigate("/");
     }
 
-    changeTheme(user.primaryColor, user.secondaryColor);
+    if (user.isProvider) {
+      changeTheme(user.primaryColor, user.secondaryColor);
+    } else {
+      fetchData();
+    }
   }, [user]);
 
   const handleCloseModal = () => {
