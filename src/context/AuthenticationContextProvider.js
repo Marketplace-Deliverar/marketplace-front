@@ -10,7 +10,7 @@ export function useAuth() {
 
 const AuthenticationContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
 
   const login = async () => {
@@ -19,7 +19,7 @@ const AuthenticationContextProvider = ({ children }) => {
     try {
       const data = await getLoggedInInformation();
       if (Object.keys(data).length === 0) {
-        setUser(null);
+        setUser({});
         setIsAuthenticated(false);
       } else {
         setUser(data);
@@ -38,7 +38,7 @@ const AuthenticationContextProvider = ({ children }) => {
     } catch (error) {
       console.error(error);
     }
-    setUser(null);
+    setUser({});
     setIsAuthenticated(false);
     window.location.href = "/";
   };

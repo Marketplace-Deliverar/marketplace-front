@@ -47,10 +47,13 @@ const Home = (props) => {
 
   console.log(
     window.location.host,
-    window.location.host === "marketplace.deliver.ar"
+    "Server: ",
+    window.location.host === "marketplace.deliver.ar",
+    "Local: ",
+    window.location.host === "localhost:3000"
   );
 
-  //return window.location.host == "localhost:3000" ? (
+  //return window.location.host === "localhost:3000" ? (
   return window.location.host === "marketplace.deliver.ar" ? (
     renderUserHome()
   ) : (

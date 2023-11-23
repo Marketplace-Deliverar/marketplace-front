@@ -31,6 +31,7 @@ export default function HomeBusiness(props) {
     const fetchData = async () => {
       try {
         let response = await getbrandByURL(window.location.host);
+        //let response = await getbrandByURL("fravega.marketplace.deliver.ar");
         if (response) {
           changeTheme(response.primaryColor, response.secondaryColor);
         }
