@@ -167,7 +167,7 @@ const Profile = (props) => {
               name="dni"
               label="DNI"
               type="number" // Campo DNI ahora es de tipo "number"
-              value={user.dni}
+              value={user.document}
               fullWidth
               //onChange={handleInputChange}
               InputLabelProps={{

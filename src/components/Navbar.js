@@ -78,7 +78,7 @@ const Navbar = () => {
           },
           {
             label: "Mis pedidos",
-            onClick: () => navigate("/purchase/estado/" + user.dni),
+            onClick: () => navigate("/purchase/estado/" + user.document),
           },
           {
             label: "Cerrar sesión",
