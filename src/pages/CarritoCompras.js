@@ -101,7 +101,7 @@ const CarritoCompras = (props) => {
         delivery_lot: loteValue,
         user_name: user.name,
         user_email: user.email,
-        user_document: user.dni,
+        user_document: user.document,
         user_discount: user.discount,
         user_vip: user.vip
       };
@@ -185,7 +185,7 @@ const CarritoCompras = (props) => {
                 Total: ${calcularTotal().toFixed(2)}
               </Typography>
               <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '20px' }}>
-                Total con descuento: ${(calcularTotal() * (1 - (user.discount/ 100))).toFixed(2)}
+                Total con descuento: ${(calcularTotal() * (1 - (user.discount / 100))).toFixed(2)}
               </Typography>
 
               <Typography variant="body1" gutterBottom style={{ color: '#1976d2' }}>
