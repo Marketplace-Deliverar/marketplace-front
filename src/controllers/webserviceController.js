@@ -20,6 +20,9 @@ const urlWebServices = {
 
   //carrito
   enviarCarrito: urlApi + "purchase",
+
+  //podio
+  podio: urlApi + "podio"
 };
 
 export default urlWebServices;
