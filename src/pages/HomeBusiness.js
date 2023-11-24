@@ -77,6 +77,8 @@ export default function HomeBusiness(props) {
           return garbarino;
         case "carrefour":
           return carrefour;
+        case "carrefour2":
+          return carrefour;
         default:
           return marketplace;
       }
