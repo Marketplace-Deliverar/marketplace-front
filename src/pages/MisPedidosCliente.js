@@ -82,8 +82,7 @@ const MisPedidosCliente = () => {
   };
 
   const handleCarritoClick = () => {
-    // Usa navigate en lugar de history.push
-    navigate('/');
+    window.location.href = "http://userprod-f1.deliver.ar:3000/"
   };
 
   return (
