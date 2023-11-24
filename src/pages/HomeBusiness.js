@@ -33,11 +33,11 @@ export default function HomeBusiness(props) {
     const fetchData = async () => {
       try {
         let response = await getbrandByURL(window.location.host);
-        // let response = await getbrandByURL("fravega.marketplace.deliver.ar");
+        //let response = await getbrandByURL("fravega.marketplace.deliver.ar");
         if (response) {
-          // changeTheme(response.primaryColor, response.secondaryColor);
-          addMarketplace(response.razon_social)
-          addCuit(response.cuit)
+          changeTheme(response.primaryColor, response.secondaryColor);
+          addMarketplace(response.razon_social);
+          addCuit(response.cuit);
         }
       } catch (error) {
         console.error("Error al obtener empresa y/o productos:", error);
@@ -46,7 +46,6 @@ export default function HomeBusiness(props) {
 
     if (isSuccess) {
       setOpenModal(true);
-
     } else {
       if (!isAuthenticated) navigate("/");
     }
@@ -65,8 +64,13 @@ export default function HomeBusiness(props) {
   //Render
   const renderBusinessImage = () => {
     const getImage = () => {
+      let brandName = user.isProvider
+        ? user.businessName.toLowerCase()
+        : window.location.host.split(".")[0];
+      console.log(brandName);
+
       // TODO: Deberiamos usar el link que viene en los datos?
-      switch (user.businessName.toLowerCase()) {
+      switch (brandName) {
         case "fravega":
           return fravega;
         case "carbarino":
@@ -138,7 +142,7 @@ export default function HomeBusiness(props) {
 
   return (
     <>
-      {user && user.businessName && renderBusinessImage()}
+      {user && renderBusinessImage()}
       <Stack direction="row" sx={{ gap: 3 }}>
         <LeftSidebarFilter />
         <ProductCards />
