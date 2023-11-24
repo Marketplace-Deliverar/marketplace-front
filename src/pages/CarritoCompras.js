@@ -107,7 +107,7 @@ const CarritoCompras = (props) => {
       const response = await enviarCarrito(carrito);
 
       if (response.rdo === 0) {
-        window.location.href = 'https://bank.deliver.ar/login-deliverar';
+        window.location.href = 'http://bank.deliver.ar/login-deliverar';
       } else {
 
         console.error("Error en la respuesta del servidor:", response.mensaje);
