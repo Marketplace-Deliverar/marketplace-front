@@ -102,6 +102,8 @@ const CarritoCompras = (props) => {
         user_name: user.name,
         user_email: user.email,
         user_document: user.dni,
+        user_discount: user.discount,
+        user_vip: user.vip
       };
 
       const response = await enviarCarrito(carrito);
@@ -177,7 +179,13 @@ const CarritoCompras = (props) => {
                 Resumen de Compra
               </Typography>
               <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '20px' }}>
+                Descuento: {user.discount}%
+              </Typography>
+              <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '20px' }}>
                 Total: ${calcularTotal().toFixed(2)}
+              </Typography>
+              <Typography variant="body1" gutterBottom style={{ color: '#1976d2', marginBottom: '20px' }}>
+                Total con descuento: ${(calcularTotal() * (1 - (user.discount/ 100))).toFixed(2)}
               </Typography>
 
               <Typography variant="body1" gutterBottom style={{ color: '#1976d2' }}>
