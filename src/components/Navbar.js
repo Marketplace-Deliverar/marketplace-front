@@ -43,6 +43,10 @@ const Navbar = () => {
           label: "Iniciar sesion / Registrarse",
           onClick: () => navigate("/"), //TODO: cambiar por ruta de login de modulo usuarios
         },
+        {
+          label: "Podio",
+          onClick: () => navigate("/podio"),
+        }
       ]);
     } else {
       if (user?.isProvider) {

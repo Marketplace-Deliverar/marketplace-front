@@ -24,6 +24,7 @@ import CarritoCompras from "./CarritoCompras";
 import { CssBaseline } from "@mui/material";
 import AuthenticationContextProvider from "../context/AuthenticationContextProvider";
 import BusinessContextProvider from "../context/BusinessContextProvider";
+import Podio from "./Podio";
 
 const StyledWrapper = styled(`div`)(({ theme }) => ({
   display: "flex",
@@ -49,6 +50,7 @@ const App = () => {
                 <Navbar />
                 <Routes>
                   <Route path="/*" element={<Home />} />
+                  <Route path="/podio" element={<Podio />} />
 
                   <Route path="/:cid/product/:pid" element={<ProductDetail />} />
                   <Route path="/catalogoEmpresas" element={<BrandsCatalogue />} />

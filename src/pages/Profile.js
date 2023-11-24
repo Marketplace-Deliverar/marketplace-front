@@ -12,6 +12,7 @@ import styled from "@emotion/styled";
 
 // External custom library
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -24,9 +25,10 @@ const StyledContainer = styled(`div`)({
 });
 
 const Profile = (props) => {
+  const { isAuthenticated, user } = useAuth();
   // const { uId } = useParams(); // Obtiene el parámetro "uId" de la URL
-  const userId = "user_2XLq6Lb94pRk43JtdRmRI0e0PkU"; // TODO: Volver atrás y obtenerlo del usuario loggeado en auth context
-  const [userData, setUserData] = useState({
+  //const userId = "user_2XLq6Lb94pRk43JtdRmRI0e0PkU"; // TODO: Volver atrás y obtenerlo del usuario loggeado en auth context
+  {/*const [userData, setUserData] = useState({
     nombre: "",
     apellido: "",
     email: "",
@@ -86,7 +88,7 @@ const Profile = (props) => {
     } catch (error) {
       console.error("Error al actualizar los datos del usuario:", error);
     }
-  };
+  };*/}
 
   return (
     <StyledContainer>
@@ -125,35 +127,35 @@ const Profile = (props) => {
               id="nombre"
               name="nombre"
               label="Nombre"
-              value={userData.nombre}
+              value={user.name}
               fullWidth
-              onChange={handleInputChange}
+              //onChange={handleInputChange}
               InputLabelProps={{
                 shrink: true,
               }}
               disabled // Campo de solo lectura
             />
-            <TextField
+            {/*<TextField
               required
               id="apellido"
               name="apellido"
               label="Apellido"
-              value={userData.apellido}
+              value={user.}
               fullWidth
               onChange={handleInputChange}
               InputLabelProps={{
                 shrink: true,
               }}
               disabled // Campo de solo lectura
-            />
+            />*/}
             <TextField
               required
               id="email"
               name="email"
               label="Email"
-              value={userData.email}
+              value={user.email}
               fullWidth
-              onChange={handleInputChange}
+              //onChange={handleInputChange}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -165,9 +167,9 @@ const Profile = (props) => {
               name="dni"
               label="DNI"
               type="number" // Campo DNI ahora es de tipo "number"
-              value={userData.dni}
+              value={user.dni}
               fullWidth
-              onChange={handleInputChange}
+              //onChange={handleInputChange}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -178,9 +180,9 @@ const Profile = (props) => {
               id="celular"
               name="celular"
               label="Celular"
-              value={userData.celular}
+              value={user.phone}
               fullWidth
-              onChange={handleInputChange}
+              //onChange={handleInputChange}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -191,9 +193,9 @@ const Profile = (props) => {
               id="direccion"
               name="direccion"
               label="Dirección"
-              value={userData.direccion}
+              value={user.address}
               fullWidth
-              onChange={handleInputChange}
+              //onChange={handleInputChange}
               InputLabelProps={{
                 shrink: true,
               }}
