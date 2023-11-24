@@ -41,12 +41,13 @@ const Navbar = () => {
       setMenuOptions([
         {
           label: "Iniciar sesion / Registrarse",
-          onClick: () => navigate("/"), //TODO: cambiar por ruta de login de modulo usuarios
+          onClick: () =>
+            (window.location.href = "http://userprod-f1.deliver.ar:3000/"),
         },
         {
           label: "Podio",
           onClick: () => navigate("/podio"),
-        }
+        },
       ]);
     } else {
       if (user?.isProvider) {
