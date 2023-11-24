@@ -29,7 +29,7 @@ export const obtenerProductosEmpresa = async function (id) {
 };
 
 export const obtenerCategoriasRubro = async function (Rubro) {
-  let url = urlWebServices.obtenerCategoriasPorRubro + Rubro + "categoria";
+  let url = urlWebServices.obtenerCategoriasPorRubro + Rubro + "/categoria";
   try {
     let response = await fetch(url, {
       method: "GET",
