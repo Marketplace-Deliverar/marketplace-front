@@ -56,7 +56,7 @@ const MisPedidosCliente = () => {
 
   async function fetchPedidos() {
     try {
-      const pedidos = await obtenerPedidosUsuario(user.dni);
+      const pedidos = await obtenerPedidosUsuario(user.document);
       setListaPedidos(pedidos);
       console.log("pedidos", pedidos)
     } catch (error) {
