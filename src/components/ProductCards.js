@@ -50,8 +50,7 @@ const ProductCards = (props) => {
           setIdEmpresa(response.uId);
           const productos = await obtenerProductosEmpresa(response.uId);
           if (typeof productos === "object") setListaProductos(productos);
-          //changeTheme(response.primaryColor, reponse.secondaryColor); TODO: Props tienen que velir con el nombre nuevo, no el viejo
-          //changeTheme(response.color_primario, response.color_secundario); //TODO: Props tienen que velir con el nombre nuevo, no el viejo
+          changeTheme(response.primaryColor, response.secondaryColor);
         } else setListaProductos([]);
       } catch (error) {
         console.error("Error al obtener empresa y/o productos:", error);

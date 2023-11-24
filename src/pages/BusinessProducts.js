@@ -40,6 +40,7 @@ const BusinessProducts = () => {
   const theme = useTheme();
   const { isAuthenticated, user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [idEmpresa, setIdEmpresa] = useState("");
   const [listaProductos, setListaProductos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRubros, setSelectRubros] = useState("");
@@ -58,7 +59,8 @@ const BusinessProducts = () => {
       // Productos
       try {
         let response = await getbrandByURL(user.domain);
-        if (response) {
+        if (response && response.error == undefined) {
+          setIdEmpresa(response.uId);
           const productos = await obtenerProductosEmpresa(response.uId);
           if (productos) setListaProductos(productos);
         }
@@ -140,7 +142,7 @@ const BusinessProducts = () => {
     const data = new FormData(event.currentTarget);
     console.log(data);
     const newData = {
-      id_empresa: "1849171299",
+      id_empresa: idEmpresa,
       titulo: data.get("titulo"),
       marca: data.get("marca"),
       description: data.get("descripcion"),

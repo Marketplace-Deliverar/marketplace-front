@@ -15,7 +15,7 @@ const BrandCard = (props) => {
   const { imageSrc, title, description, label, url } = props;
 
   const handleClick = () => {
-    // window.location.href = 'http://hola.localhost:3000';
+    //window.location.href = "http://hola.localhost:3000";
     window.location.href = "https://" + url;
   };
 
