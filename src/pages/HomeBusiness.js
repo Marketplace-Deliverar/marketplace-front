@@ -17,12 +17,14 @@ import { useAuth } from "../context/AuthenticationContextProvider";
 // External components
 import { Box, Button, Modal, Stack, Typography } from "@mui/material";
 import { getbrandByURL } from "../apis/brandApis";
+import { useBusinessContext } from "../context/BusinessContextProvider";
 
 export default function HomeBusiness(props) {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { changeTheme } = useThemeContext();
   const [openModal, setOpenModal] = useState(false);
+  const { addMarketplace, addCuit } = useBusinessContext();
 
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(window.location.search);
@@ -30,10 +32,12 @@ export default function HomeBusiness(props) {
     const isSuccess = successParam === "true";
     const fetchData = async () => {
       try {
-        //let response = await getbrandByURL(window.location.host);
-        let response = await getbrandByURL("fravega.marketplace.deliver.ar");
+        let response = await getbrandByURL(window.location.host);
+        // let response = await getbrandByURL("fravega.marketplace.deliver.ar");
         if (response) {
-          changeTheme(response.primaryColor, response.secondaryColor);
+          // changeTheme(response.primaryColor, response.secondaryColor);
+          addMarketplace(response.razon_social)
+          addCuit(response.cuit)
         }
       } catch (error) {
         console.error("Error al obtener empresa y/o productos:", error);
@@ -42,7 +46,7 @@ export default function HomeBusiness(props) {
 
     if (isSuccess) {
       setOpenModal(true);
-      
+
     } else {
       if (!isAuthenticated) navigate("/");
     }

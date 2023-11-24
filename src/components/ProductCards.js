@@ -39,12 +39,12 @@ const ProductCards = (props) => {
 
         if (user.isProvider) {
           // For brands looking into their site
-          //response = await getbrandByURL(user.domain);
-          response = await getbrandByURL("fravega.marketplace.deliver.ar");
+          response = await getbrandByURL(user.domain);
+          // response = await getbrandByURL("fravega.marketplace.deliver.ar");
         } else {
           // For users looking into brand site
-          //response = await getbrandByURL(window.location.host);
-          response = await getbrandByURL("fravega.marketplace.deliver.ar");
+          response = await getbrandByURL(window.location.host);
+          // response = await getbrandByURL("fravega.marketplace.deliver.ar");
         }
         if (response && response.error == undefined) {
           setIdEmpresa(response.uId);

@@ -23,6 +23,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useAuth } from "../context/AuthenticationContextProvider";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -48,14 +49,14 @@ const ColoredTableCell = styled(TableCell)(({ theme }) => ({
 
 const MisPedidosCliente = () => {
   //const userId = "8337531602"; //TODO: Agarrarlo del context
-  const dni = "112233";  //Para obtener los pedidos necesito el dni del usuario (se pasa por url) - acomodar link en navbar que esta harcodeado
+  const { isAuthenticated, user } = useAuth();
   const [listaPedidos, setListaPedidos] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
 
   async function fetchPedidos() {
     try {
-      const pedidos = await obtenerPedidosUsuario(dni);
+      const pedidos = await obtenerPedidosUsuario(user.dni);
       setListaPedidos(pedidos);
       console.log("pedidos", pedidos)
     } catch (error) {
@@ -65,7 +66,7 @@ const MisPedidosCliente = () => {
 
   useEffect(() => {
     fetchPedidos();
-  }, [dni]);
+  }, [user.dni]);
 
   const handleDescargarArchivo = (url) => {
     if (url) {

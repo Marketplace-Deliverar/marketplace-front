@@ -28,6 +28,7 @@ import { useCartContext } from "../context/CartContextProvider";
 import { enviarCarrito } from "../controllers/carritoController";
 import { useAuth } from "../context/AuthenticationContextProvider";
 import { getbrandByURL } from "../apis/brandApis";
+import { useBusinessContext } from "../context/BusinessContextProvider";
 
 const StyledContainer = styled(`div`)({
   display: "flex",
@@ -58,8 +59,9 @@ const CarritoCompras = (props) => {
   const [openPopup, setOpenPopup] = useState(false);
   const [loteValue, setLoteValue] = useState('');
   const { isAuthenticated, user } = useAuth();
-  let businessName;
-  let cuit;
+  const { cuit, marketplace } = useBusinessContext();
+  console.log(cuit);
+  console.log(marketplace);
 
 
   //windows.location
@@ -86,24 +88,6 @@ const CarritoCompras = (props) => {
     setLoteValue(inputValue);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response = await getbrandByURL(window.location.host);
-        console.log("response:", response)
-        if (response) {
-          businessName = response.businessName;
-          cuit = response.cuit;
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-
   const enviar_a_pagos = async (cart) => {
     console.log("Llega a enviar carrito", cart);
 
@@ -112,22 +96,18 @@ const CarritoCompras = (props) => {
         product_name: cart[0].title,
         product_price: cart[0].price,
         product_amount: cart[0].cantidad,
-        product_marketplace: "", //ver
-        product_marketplace_cuit: "",  //ver
+        product_marketplace: marketplace, //ver
+        product_marketplace_cuit: cuit,  //ver
         delivery_lot: loteValue,
         user_name: user.name,
         user_email: user.email,
         user_document: user.dni,
       };
-      console.log("hola")
-
-      console.log("Datos del carrito a enviar", carrito);
 
       const response = await enviarCarrito(carrito);
 
       if (response.rdo === 0) {
-        console.error("OK Post");
-
+        window.location.href = 'https://bank.deliver.ar/login-deliverar';
       } else {
 
         console.error("Error en la respuesta del servidor:", response.mensaje);
