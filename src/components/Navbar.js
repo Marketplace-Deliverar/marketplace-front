@@ -45,8 +45,8 @@ const Navbar = () => {
             (window.location.href = "http://userprod-f1.deliver.ar:3000/"),
         },
         {
-          label: "Podio",
-          onClick: () => navigate("/podio"),
+          label: "Robots más rápidos",
+          onClick: () => navigate("/robots-rapidos"),
         },
       ]);
     } else {

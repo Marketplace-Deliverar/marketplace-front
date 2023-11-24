@@ -31,7 +31,7 @@ export default function Podio({ data }) {
                 <TableHead>
                     <TableRow>
                         <TableCell align="left">Puesto</TableCell>
-                        <TableCell align="left">Corredor</TableCell>
+                        <TableCell align="left">Robot</TableCell>
                         <TableCell align="left">Tiempo</TableCell>
                         <TableCell align="left">Diferencia con 1°</TableCell>
                     </TableRow>
